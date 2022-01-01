@@ -11,5 +11,7 @@ namespace Domain.Entities
         public string Name { get; set; }
 
         public ICollection<Author> Authors { get; set; } = new List<Author>();
+
+        public ICollection<Publisher> Publishers { get; set; } = new List<Publisher>();
     }
 }

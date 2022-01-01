@@ -16,6 +16,14 @@ namespace DAL.Mappers
             builder.HasKey(p => p.Id);
 
             builder.Property(p => p.Name).HasMaxLength(100);
+
+            builder.HasOne(p => p.Country)
+                .WithMany(c => c.Publishers)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasMany(p => p.Books)
+                .WithOne(b => b.Publisher)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

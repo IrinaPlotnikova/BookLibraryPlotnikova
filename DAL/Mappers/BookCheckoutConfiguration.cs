@@ -14,6 +14,18 @@ namespace DAL.Mappers
         public void Configure(EntityTypeBuilder<BookCheckout> builder)
         {
             builder.HasKey(bc => bc.Id);
+
+            builder.HasOne(bc => bc.BookCopy)
+                .WithMany(copy => copy.BookCheckouts)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasOne(bc => bc.Reader)
+                .WithMany(r => r.BookCheckouts)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasMany(bc => bc.MoneyTransactions)
+                .WithOne(mt => mt.BookCheckout)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

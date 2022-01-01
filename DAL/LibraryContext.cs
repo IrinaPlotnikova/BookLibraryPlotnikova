@@ -15,8 +15,6 @@ namespace DAL
 
         public DbSet<Book> Books { get; set; }
 
-        public DbSet<BookAuthor> BookAuthors { get; set; }
-
         public DbSet<BookCheckout> BookCheckouts { get; set; }
 
         public DbSet<BookCopy> BookCopies { get; set; }
@@ -37,13 +35,12 @@ namespace DAL
 
         public LibraryContext(DbContextOptions<LibraryContext> options) : base(options)
         {
-            Database.EnsureCreated();
+           // Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new AuthorConfiguration());
-            modelBuilder.ApplyConfiguration(new BookAuthorConfiguration());
             modelBuilder.ApplyConfiguration(new BookCheckoutConfiguration());
             modelBuilder.ApplyConfiguration(new BookConfiguration());
             modelBuilder.ApplyConfiguration(new BookCopyConfiguration());
@@ -56,5 +53,11 @@ namespace DAL
         }
 
 
+     /*   protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            Console.WriteLine("OnConfiguring");
+            //options.UseNpgsql("Host=localhost;Database=postgres;Port=5432;Username=postgres;Password=12345678"); 
+         //   options.UseNpgsql("Server=localhost;Database=ppp;Port=5433;Username=postgres;Password=postgres");
+        }*/
     }
 }

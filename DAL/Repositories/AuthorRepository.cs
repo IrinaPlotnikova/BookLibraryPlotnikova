@@ -20,7 +20,7 @@ namespace DAL.Repositories
         {
             return await Context.Authors
                 .Include(e => e.Country)
-                .Include(e => e.BookAuthors)
+                .Include(e => e.Books)
                 .ToListAsync();
         }
 
@@ -29,7 +29,7 @@ namespace DAL.Repositories
             return await Context.Authors
                 .Where(expression)
                 .Include(e => e.Country)
-                .Include(e => e.BookAuthors)
+                .Include(e => e.Books)
                 .ToListAsync();
         }
 
@@ -37,7 +37,7 @@ namespace DAL.Repositories
         {
             return await Context.Authors
                 .Include(e => e.Country)
-                .Include(e => e.BookAuthors)
+                .Include(e => e.Books)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 

@@ -24,7 +24,7 @@ namespace Domain.Entities
 
         public Publisher Publisher { get; set; }
 
-        public ICollection<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();
+        public ICollection<Author> Authors { get; set; } = new List<Author>();
 
         public ICollection<BookCopy> BookCopies { get; set; } = new List<BookCopy>();
         

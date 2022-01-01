@@ -19,6 +19,10 @@ namespace DAL.Mappers
             builder.Property(b => b.LibraryCard).HasMaxLength(200);
             builder.Property(b => b.Passport).HasMaxLength(200);
             builder.Property(b => b.Email).HasMaxLength(200);
+
+            builder.HasMany(r => r.BookCheckouts)
+                .WithOne(bc => bc.Reader)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

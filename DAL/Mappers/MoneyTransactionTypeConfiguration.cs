@@ -16,6 +16,10 @@ namespace DAL.Mappers
             builder.HasKey(mtt => mtt.Id);
 
             builder.Property(mtt => mtt.Name).HasMaxLength(100);
+
+            builder.HasMany(mtt => mtt.MoneyTransactions)
+                .WithOne(mt => mt.MoneyTransactionType)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

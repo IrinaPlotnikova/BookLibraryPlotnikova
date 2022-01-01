@@ -16,6 +16,6 @@ namespace Domain.Entities
 
         public Country Country { get; set; }
 
-        public ICollection<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();
+        public ICollection<Book> Books { get; set; } = new List<Book>();
     }
 }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "uWevPWTkTxMnMr6aWDgzDBMydRhNix3tno8fGKmz2C81NTpLRqgzmN5gRtxFhgsMJJtQ7WZjdzbnPQhaVeDQLA==",
+  "dgSpecHash": "HdPRlbRfMCypKsiM3zIWjxL0c1OwvqrXucjei3KMaTQ8Vx26q028/gZ/x3P1uzf027UnuXbpG7LgrJSI7RVgWw==",
   "success": true,
   "projectFilePath": "D:\\VSU\\Labs\\5th_semester\\.Net\\BookLibraryPlotnikova\\LibraryPlotnikova.csproj",
   "expectedPackageFiles": [
@@ -19,7 +19,6 @@
     "C:\\Users\\Irina\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\5.0.13\\microsoft.entityframeworkcore.analyzers.5.0.13.nupkg.sha512",
     "C:\\Users\\Irina\\.nuget\\packages\\microsoft.entityframeworkcore.design\\5.0.13\\microsoft.entityframeworkcore.design.5.0.13.nupkg.sha512",
     "C:\\Users\\Irina\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\5.0.13\\microsoft.entityframeworkcore.relational.5.0.13.nupkg.sha512",
-    "C:\\Users\\Irina\\.nuget\\packages\\microsoft.entityframeworkcore.tools\\5.0.13\\microsoft.entityframeworkcore.tools.5.0.13.nupkg.sha512",
     "C:\\Users\\Irina\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\5.0.0\\microsoft.extensions.caching.abstractions.5.0.0.nupkg.sha512",
     "C:\\Users\\Irina\\.nuget\\packages\\microsoft.extensions.caching.memory\\5.0.0\\microsoft.extensions.caching.memory.5.0.0.nupkg.sha512",
     "C:\\Users\\Irina\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\5.0.0\\microsoft.extensions.configuration.abstractions.5.0.0.nupkg.sha512",

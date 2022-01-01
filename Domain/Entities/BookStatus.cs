@@ -10,6 +10,6 @@ namespace Domain.Entities
     {
         public string Name { get; set; }
 
-        public ICollection<Book> Books { get; set; } = new List<Book>();
+        public ICollection<BookCopy> BookCopies { get; set; } = new List<BookCopy>();
     }
 }

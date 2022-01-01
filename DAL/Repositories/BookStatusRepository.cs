@@ -18,7 +18,7 @@ namespace DAL.Repositories
         public override async Task<ICollection<BookStatus>> GetAllAsync()
         {
             return await Context.BookStatuses
-                .Include(e => e.Books)
+                .Include(e => e.BookCopies)
                 .ToListAsync();
         }
 
@@ -26,14 +26,14 @@ namespace DAL.Repositories
         {
             return await Context.BookStatuses
                 .Where(expression)
-                .Include(e => e.Books)
+                .Include(e => e.BookCopies)
                 .ToListAsync();
         }
 
         public override async Task<BookStatus> GetByIdAsync(int id)
         {
             return await Context.BookStatuses
-                .Include(e => e.Books)
+                .Include(e => e.BookCopies)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
     }
