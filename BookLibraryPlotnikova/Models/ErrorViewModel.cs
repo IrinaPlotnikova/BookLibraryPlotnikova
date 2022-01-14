@@ -1,6 +1,6 @@
 using System;
 
-namespace BookLibraryPlotnikova.Models
+namespace LibraryPlotnikova.Models
 {
     public class ErrorViewModel
     {

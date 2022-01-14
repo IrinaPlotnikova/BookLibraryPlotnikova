@@ -21,18 +21,18 @@ namespace DAL.Repositories
                 .Include(e => e.Genre)
                 .Include(e => e.Publisher)
                 .Include(e => e.Authors)
-                .Include(e => e.BookCopies)
+                .Include(e => e.BookCopies).ThenInclude(bc => bc.Reader)
                 .ToListAsync();
         }
 
         public override async Task<ICollection<Book>> GetByFilterAsync(Expression<Func<Book, bool>> expression)
         {
             return await Context.Books
-                .Where(expression)
                 .Include(e => e.Genre)
                 .Include(e => e.Publisher)
                 .Include(e => e.Authors)
-                .Include(e => e.BookCopies)
+                .Include(e => e.BookCopies).ThenInclude(bc => bc.Reader)
+                .Where(expression)
                 .ToListAsync();
         }
 
@@ -42,7 +42,7 @@ namespace DAL.Repositories
                 .Include(e => e.Genre)
                 .Include(e => e.Publisher)
                 .Include(e => e.Authors)
-                .Include(e => e.BookCopies)
+                .Include(e => e.BookCopies).ThenInclude(bc => bc.Reader)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
     }

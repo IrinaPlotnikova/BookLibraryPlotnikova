@@ -21,17 +21,21 @@ namespace DAL.Repositories
             return await Context.BookCopies
                 .Include(e => e.Book)
                 .Include(e => e.BookStatus)
+                .Include(e => e.Reader)
                 .Include(e => e.BookCheckouts)
+                .Include(e => e.MoneyTransactions)
                 .ToListAsync();
         }
 
         public override async Task<ICollection<BookCopy>> GetByFilterAsync(Expression<Func<BookCopy, bool>> expression)
         {
             return await Context.BookCopies
-                .Where(expression)
                 .Include(e => e.Book)
+                .Include(e => e.Reader)
                 .Include(e => e.BookStatus)
                 .Include(e => e.BookCheckouts)
+                .Include(e => e.MoneyTransactions)
+                .Where(expression)
                 .ToListAsync();
         }
 
@@ -39,8 +43,10 @@ namespace DAL.Repositories
         {
             return await Context.BookCopies
                 .Include(e => e.Book)
+                .Include(e => e.Reader)
                 .Include(e => e.BookStatus)
                 .Include(e => e.BookCheckouts)
+                .Include(e => e.MoneyTransactions)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
     }

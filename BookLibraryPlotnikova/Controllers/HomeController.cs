@@ -1,4 +1,5 @@
-﻿using BookLibraryPlotnikova.Models;
+﻿
+using LibraryPlotnikova.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -20,6 +21,7 @@ namespace BookLibraryPlotnikova.Controllers
 
         public IActionResult Index()
         {
+            ViewData["test"] = new string[] { "asdf", "fjh", "tfjhb" };
             return View();
         }
 
@@ -33,5 +35,6 @@ namespace BookLibraryPlotnikova.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }

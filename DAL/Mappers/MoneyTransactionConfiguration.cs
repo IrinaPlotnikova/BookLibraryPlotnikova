@@ -15,8 +15,12 @@ namespace DAL.Mappers
         {
             builder.HasKey(mt => mt.Id);
 
-            builder.HasOne(mt => mt.BookCheckout)
+            builder.HasOne(mt => mt.BookCopy)
                 .WithMany(bc => bc.MoneyTransactions)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasOne(mt => mt.Reader)
+                .WithMany(r => r.MoneyTransactions)
                 .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasOne(mt => mt.MoneyTransactionType)

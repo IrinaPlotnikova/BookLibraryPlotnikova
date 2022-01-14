@@ -1,0 +1,85 @@
+﻿@model LibraryPlotnikova.Models.CreateBookModel
+@{ ViewData["Title"] = "Create Book"; }
+<link rel="stylesheet" href="~/css/create.css" />
+
+<div class="container">
+    <form asp-controller="Book" asp-action="CreateFromModel">
+        @Html.HiddenFor(x => x.Id)
+
+        <div class="input-block">
+            <label asp-for="@Model.Name">Название</label>
+            <input asp-for="@Model.Name" maxlength="50" size="55" placeholder="Введите название" autofocus autocomplete="off" />
+            <span class="error-message" asp-validation-for="@Model.Name"></span>
+        </div>
+
+        @if (Model.Id == 0)
+        {
+            <div class="input-block">
+                <label asp-for="@Model.NumberOfCopies">Количество копий</label>
+                <input asp-for="@Model.NumberOfCopies" />
+                <span class="error-message" asp-validation-for="@Model.NumberOfCopies"></span>
+            </div>
+        }
+
+        <div class="input-block">
+            <label asp-for="@Model.NumberOfPages">Количество страниц</label>
+            <input asp-for="@Model.NumberOfPages" />
+            <span class="error-message" asp-validation-for="@Model.NumberOfPages"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="@Model.PublishmentYear">Год издания</label>
+            <input asp-for="@Model.PublishmentYear" />
+            <span class="error-message" asp-validation-for="@Model.PublishmentYear"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="@Model.Price">Стоимость</label>
+            <input asp-for="@Model.Price" />
+            <span class="error-message" asp-validation-for="@Model.Price"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="@Model.GenreId">Жанр</label>
+            @Html.DropDownListFor(e => e.GenreId, Model.AvailableGenres)
+        </div>
+
+        @if(Model.AvailablePublishers.Count() != 0)
+        {
+            <div class="input-block">
+                <label asp-for="@Model.PublisherId">Издатель</label>
+                @Html.DropDownListFor(e => e.PublisherId, Model.AvailablePublishers)
+            </div>
+        }
+        
+        @if(Model.AvailableAuthors.Count() != 0)
+        {
+            <div class="input-block">
+                <label>Авторы</label>
+                <div class="input-block-multiselect">
+                    @foreach (var item in @Model.AvailableAuthors)
+                    {
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"
+                                       name="AuthorFilter.Ids"
+                                       value="@item.Value"
+                                       checked="@item.Selected" />
+                                @item.Text
+                            </label>
+                        </div>      
+                    }
+                </div>
+            </div>
+        }
+
+        <input type="submit" />
+    </form>
+</div>
+
+
+@section scripts
+{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

@@ -1,0 +1,32 @@
+﻿@model LibraryPlotnikova.Models.CreatePublisherModel
+@{ 
+    ViewData["Title"] = "Create Publisher"; 
+}
+<link rel="stylesheet" href="~/css/create.css" />
+
+<div class="container">
+    <form asp-controller="Publisher" asp-action="CreateFromModel">
+        @Html.HiddenFor(x => x.Id)
+
+        <div class="input-block">
+            <label asp-for="@Model.Name">Название</label>
+            <input asp-for="@Model.Name" maxlength="50" size="55" placeholder="Введите название" autofocus autocomplete="off" />
+            <span class="error-message" asp-validation-for="@Model.Name"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="@Model.CountryId">Страна</label>
+            @Html.DropDownListFor(e => e.CountryId, Model.AvailableCountries)
+        </div>
+   
+
+        <input class="btn btn-dark" type="submit" />
+    </form>
+</div>
+    
+
+@section scripts
+{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

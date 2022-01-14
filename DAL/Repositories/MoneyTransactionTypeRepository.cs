@@ -25,8 +25,8 @@ namespace DAL.Repositories
         public override async Task<ICollection<MoneyTransactionType>> GetByFilterAsync(Expression<Func<MoneyTransactionType, bool>> expression)
         {
             return await Context.MoneyTransactionTypes
-                .Where(expression)
                 .Include(e => e.MoneyTransactions)
+                .Where(expression)
                 .ToListAsync();
         }
 

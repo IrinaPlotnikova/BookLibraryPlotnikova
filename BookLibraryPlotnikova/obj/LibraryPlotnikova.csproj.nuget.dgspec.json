@@ -4,14 +4,14 @@
     "D:\\VSU\\Labs\\5th_semester\\.Net\\BookLibraryPlotnikova\\LibraryPlotnikova.csproj": {}
   },
   "projects": {
-    "D:\\VSU\\Labs\\5th_semester\\.Net\\BookLibraryPlotnikova\\LibraryPlotnikova.csproj": {
+    "D:\\VSU\\Labs\\5th_semester\\.Net\\BLL\\BLL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\VSU\\Labs\\5th_semester\\.Net\\BookLibraryPlotnikova\\LibraryPlotnikova.csproj",
-        "projectName": "LibraryPlotnikova",
-        "projectPath": "D:\\VSU\\Labs\\5th_semester\\.Net\\BookLibraryPlotnikova\\LibraryPlotnikova.csproj",
+        "projectUniqueName": "D:\\VSU\\Labs\\5th_semester\\.Net\\BLL\\BLL.csproj",
+        "projectName": "BLL",
+        "projectPath": "D:\\VSU\\Labs\\5th_semester\\.Net\\BLL\\BLL.csproj",
         "packagesPath": "C:\\Users\\Irina\\.nuget\\packages\\",
-        "outputPath": "D:\\VSU\\Labs\\5th_semester\\.Net\\BookLibraryPlotnikova\\obj\\",
+        "outputPath": "D:\\VSU\\Labs\\5th_semester\\.Net\\BLL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -52,7 +52,81 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\VSU\\Labs\\5th_semester\\.Net\\BookLibraryPlotnikova\\LibraryPlotnikova.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\VSU\\Labs\\5th_semester\\.Net\\BookLibraryPlotnikova\\LibraryPlotnikova.csproj",
+        "projectName": "LibraryPlotnikova",
+        "projectPath": "D:\\VSU\\Labs\\5th_semester\\.Net\\BookLibraryPlotnikova\\LibraryPlotnikova.csproj",
+        "packagesPath": "C:\\Users\\Irina\\.nuget\\packages\\",
+        "outputPath": "D:\\VSU\\Labs\\5th_semester\\.Net\\BookLibraryPlotnikova\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Irina\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "D:\\VSU\\Labs\\5th_semester\\.Net\\BLL\\BLL.csproj": {
+                "projectPath": "D:\\VSU\\Labs\\5th_semester\\.Net\\BLL\\BLL.csproj"
+              },
+              "D:\\VSU\\Labs\\5th_semester\\.Net\\DAL\\DAL.csproj": {
+                "projectPath": "D:\\VSU\\Labs\\5th_semester\\.Net\\DAL\\DAL.csproj"
+              },
+              "D:\\VSU\\Labs\\5th_semester\\.Net\\Domain\\Domain.csproj": {
+                "projectPath": "D:\\VSU\\Labs\\5th_semester\\.Net\\Domain\\Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
           "dependencies": {
+            "Microsoft.AspNet.Mvc": {
+              "target": "Package",
+              "version": "[5.2.7, )"
+            },
             "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation": {
               "target": "Package",
               "version": "[5.0.10, )"
@@ -66,6 +140,14 @@
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
               "version": "[5.0.10, )"
+            },
+            "jQuery": {
+              "target": "Package",
+              "version": "[3.6.0, )"
+            },
+            "jQuery.UI.Combined": {
+              "target": "Package",
+              "version": "[1.13.0, )"
             }
           },
           "imports": [

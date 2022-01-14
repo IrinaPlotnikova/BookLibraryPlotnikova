@@ -1,0 +1,12 @@
+﻿.error-message {
+    color: darkred;
+}
+
+.input-block{
+    margin-bottom: 1vh;
+}
+
+.input-block-multiselect {
+    max-height: 30vh;
+    overflow-y: auto;
+}

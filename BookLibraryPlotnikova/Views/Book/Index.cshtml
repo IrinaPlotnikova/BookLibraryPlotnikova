@@ -1,0 +1,129 @@
+﻿@model LibraryPlotnikova.Models.BookModels.AllBooksModel
+@{ 
+    ViewData["Title"] = "Books";
+}
+
+<link rel="stylesheet" href="~/css/index.css" />
+
+
+<div class="container">
+    <div class="row justify-content-between">
+        <div class="col-auto">
+            <table>
+                <tr>
+                    <th><h3>Книги</h3></th>
+                    <th>
+                        <form method="get" asp-controller="Book" asp-action="Create">
+                            <button type="submit" class="btn btn-outline-dark">Добавить книгу</button>
+                        </form>
+                    </th>
+                </tr>
+            </table>
+
+            <table class="main_table">
+                <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th>Год издания</th>
+                        <th>Страницы</th>
+                        <th>Копии*</th>
+                        <th>Жанр</th>
+                        <th>Издатель</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in @Model.Books)
+                    {
+                        int numberOfBooks = item.BookCopies.Count(e => e.BookStatusId == 1 || e.BookStatusId == 2);
+                        int numberOfGivenBooks = item.BookCopies.Count(e => e.BookStatusId == 2);
+                        int numberOfBooksInLibrary = numberOfBooks - numberOfGivenBooks;
+
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@item.PublishmentYear</td>
+                            <td>@item.NumberOfPages</td>
+                            <td>
+                                @numberOfBooksInLibrary (@numberOfBooks)
+                                <a href="@Url.Action("AddCopy", "Book", new {bookId = @item.Id })">&#10133;</a> 
+                            </td>
+                            <td>@item.Genre.Name</td>
+                            <td>@item.Publisher?.Name</td>
+                            <td>
+                                <a href="@Url.Action("Info", "Book", new { id = @item.Id })">&#128269;</a>
+                                <a href="@Url.Action("Change", "Book", new { id = @item.Id })">&#9999;</a>
+
+                                @if(numberOfGivenBooks == 0) 
+                                {
+                                    <a href="@Url.Action("Delete", "Book", new { id = @item.Id })">&#10060;</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div style="color:grey">* Кол-во копий в библиотеке (в библиотеке + у читателей)</div>
+        </div>
+
+        <div class="col-auto">
+            <form asp-controller="Book" asp-action="IndexWithFilter">
+                <h3>Фильтры</h3>
+                <h5>Жанры</h5>
+                <div class="filter-block">
+                    @foreach (var item in @Model.AvailableGenres)
+                    {
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"
+                                       name="BookFilter.GenresId"
+                                       value="@item.Value"
+                                       checked="@item.Selected" />
+                                @item.Text
+                            </label>
+                        </div>
+                    }
+                </div>
+
+                @if(Model.AvailablePublishers.Count() != 0)
+                {
+                    <h5>Издательства</h5>
+                    <div class="filter-block">
+                        @foreach (var item in @Model.AvailablePublishers)
+                        {
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox"
+                                           name="BookFilter.PublishersId"
+                                           value="@item.Value"
+                                           checked="@item.Selected" />
+                                    @item.Text
+                                </label>
+                            </div>
+                        }
+                    </div>
+                } 
+                
+                @if(@Model.AvailableAuthors.Count() != 0)
+                {
+                    <h5>Авторы</h5>
+                    <div class="filter-block">
+                        @foreach (var item in @Model.AvailableAuthors)
+                        {
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox"
+                                           name="BookFilter.AuthorsId"
+                                           value="@item.Value"
+                                           checked="@item.Selected" />
+                                    @item.Text
+                                </label>
+                            </div>
+                        }
+                    </div>
+                }
+
+                <button type="submit" class="btn btn-dark">Обновить</button>
+            </form>
+        </div>
+    </div>
+</div>

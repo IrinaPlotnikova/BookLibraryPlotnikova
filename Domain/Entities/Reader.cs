@@ -10,12 +10,14 @@ namespace Domain.Entities
     {
         public string Name { get; set; }
 
-        public string LibraryCard { get; set; }
-
         public string Email { get; set; }
 
         public string Passport { get; set; }
 
         public ICollection<BookCheckout> BookCheckouts { get; set; } = new List<BookCheckout>();
+
+        public ICollection<MoneyTransaction> MoneyTransactions { get; set; } = new List<MoneyTransaction>();
+
+        public ICollection<BookCopy> BookCopies { get; set; } = new List<BookCopy>();
     }
 }

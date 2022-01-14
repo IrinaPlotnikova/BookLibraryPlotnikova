@@ -18,7 +18,8 @@ namespace DAL.Repositories
         public override async Task<ICollection<MoneyTransaction>> GetAllAsync()
         {
             return await Context.MoneyTransactions
-                .Include(e => e.BookCheckout)
+                .Include(e => e.BookCopy).ThenInclude(bc => bc.Book)
+                .Include(e => e.Reader)
                 .Include(e => e.MoneyTransactionType)
                 .ToListAsync();
         }
@@ -26,16 +27,18 @@ namespace DAL.Repositories
         public override async Task<ICollection<MoneyTransaction>> GetByFilterAsync(Expression<Func<MoneyTransaction, bool>> expression)
         {
             return await Context.MoneyTransactions
-                .Where(expression)
-                .Include(e => e.BookCheckout)
+                .Include(e => e.BookCopy).ThenInclude(bc => bc.Book)
+                .Include(e => e.Reader)
                 .Include(e => e.MoneyTransactionType)
+                .Where(expression)
                 .ToListAsync();
         }
 
         public override async Task<MoneyTransaction> GetByIdAsync(int id)
         {
             return await Context.MoneyTransactions
-                .Include(e => e.BookCheckout)
+                .Include(e => e.BookCopy).ThenInclude(bc => bc.Book)
+                .Include(e => e.Reader)
                 .Include(e => e.MoneyTransactionType)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }

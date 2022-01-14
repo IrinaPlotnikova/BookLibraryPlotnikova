@@ -15,14 +15,10 @@ namespace DAL.Mappers
         {
             builder.HasKey(r => r.Id);
 
-            builder.Property(b => b.Name).HasMaxLength(200);
-            builder.Property(b => b.LibraryCard).HasMaxLength(200);
-            builder.Property(b => b.Passport).HasMaxLength(200);
-            builder.Property(b => b.Email).HasMaxLength(200);
+            builder.Property(b => b.Name).HasMaxLength(150);
+            builder.Property(b => b.Passport).HasMaxLength(20);
+            builder.Property(b => b.Email).HasMaxLength(40);
 
-            builder.HasMany(r => r.BookCheckouts)
-                .WithOne(bc => bc.Reader)
-                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

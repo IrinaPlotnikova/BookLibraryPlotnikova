@@ -25,10 +25,6 @@ namespace DAL.Mappers
                 .WithMany(p => p.Books)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            builder.HasMany(b => b.BookCopies)
-                .WithOne(bc => bc.Book)
-                .OnDelete(DeleteBehavior.SetNull);
-
             builder.HasMany(b => b.Authors)
                 .WithMany(a => a.Books)
                 .UsingEntity(t => t.ToTable("BookAuthors"));

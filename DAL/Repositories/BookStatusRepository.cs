@@ -25,8 +25,8 @@ namespace DAL.Repositories
         public override async Task<ICollection<BookStatus>> GetByFilterAsync(Expression<Func<BookStatus, bool>> expression)
         {
             return await Context.BookStatuses
-                .Where(expression)
                 .Include(e => e.BookCopies)
+                .Where(expression)
                 .ToListAsync();
         }
 

@@ -1,0 +1,35 @@
+﻿@model LibraryPlotnikova.Models.ReaderModels.ReturnBooksModel
+@{ViewData["Title"] = "Take Books"; }
+<link rel="stylesheet" href="~/css/info.css" />
+
+<div class="container">
+    <form asp-controller="Reader" asp-action="TakeBooks">
+        @Html.HiddenFor(x => x.Reader.Id)
+
+        <div class="info-block">
+            <a class="info-header">Приём от</a> @Model.Reader.Name 
+        </div>
+
+        @if(Model.AvailableBookCheckouts.Count() != 0)
+        {
+            <div class="info-block">
+                <div class="info-header">Книги</div>
+                <div class="long-list-of-items-block">
+                    @foreach (var item in @Model.AvailableBookCheckouts)
+                    {
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"
+                                       name="SelectedBookCheckoutsId"
+                                       value="@item.Value" />
+                                @item.Text
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        <input class="btn btn-dark" type="submit" value="Принять"/>
+    </form>
+</div>

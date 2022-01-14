@@ -1,0 +1,87 @@
+﻿@model LibraryPlotnikova.Models.ReaderModels.InfoReaderModel
+@{ 
+    ViewData["Title"] = "Reader Info";
+}
+<link rel="stylesheet" href="~/css/info.css" />
+
+<div class="container">
+    <table>
+        <tr>
+            <th><h3>@Model.Reader.Name</h3></th>
+            <th><a href="@Url.Action("Change", "Reader", new { id = Model.Reader.Id })">&#9999;</a></th>
+        </tr>
+    </table>
+
+    <br />
+    <div class="info-block"><a class="info-header">Email</a> @Model.Reader.Email</div>
+    <div class="info-block"><a class="info-header">Паспорт</a> @Model.Reader.Passport</div>
+    <div class="info-block">
+        @Html.ActionLink("Выдать книги", "GiveBooks", new { readerId = Model.Reader.Id })
+        @if (Model.BookCheckoutsCurrent.Count() != 0)
+        {
+            <a> / @Html.ActionLink("Принять книги", "TakeBooks", new { readerId = Model.Reader.Id })</a>
+        }
+    </div>
+    
+
+    @if(Model.BookCheckoutsCurrent.Count() != 0)
+    {
+        DateTime currentDate = DateTime.Today;
+
+        <br />
+        <div class="info-header">Выданные книги</div>
+        <table class="main-table">
+            <tr>
+                <th>Название</th>
+                <th>Период выдачи</th>
+                <th>Текущий штраф</th>
+            </tr>
+            @foreach (var item in @Model.BookCheckoutsCurrent)
+            {
+                <tr>
+                    <td>@Html.ActionLink($"{item.BookCopy.Book?.Name}", "Info", "Book", new { id = item.BookCopy.BookId})</td>
+                    <td>@item.DateStart.ToShortDateString() – @item.DateFinish.ToShortDateString()</td>
+                    <td>
+                        @if(currentDate > item.DateFinish)
+                        {
+                            int diffence = (currentDate - item.DateFinish).Days;
+                            int fine = diffence * item.OverdueFine;
+                            <a>@fine р.&nbsp;&nbsp;&nbsp;(@diffence дн. * @item.OverdueFine р.)</a>
+                        } 
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    
+    @if (Model.BookCheckoutsHistory.Count() != 0) 
+    { 
+        <br />
+        <div class="info-header">История</div>
+        <table class="main-table">
+            <tr>
+                <th>Название</th>
+                <th>Период выдачи</th>
+                <th>Дата сдачи</th>
+                <th>Штраф</th>
+            </tr>
+            @foreach (var item in @Model.BookCheckoutsHistory)
+            {
+                <tr>
+                    <td>@Html.ActionLink($"{item.BookCopy.Book?.Name}", "Info", "Book", new { id = item.BookCopy.BookId })</td>
+                    <td>@item.DateStart.ToShortDateString() – @item.DateFinish.ToShortDateString()</td>
+                    <td>@item.DateBookReturned.Value.ToShortDateString()</td>
+                    <td>
+                        @if(item.DateBookReturned > item.DateFinish)
+                        {
+                            int diffence = (item.DateBookReturned.Value - item.DateFinish).Days;
+                            int fine = diffence * item.OverdueFine;
+                            <a>@fine р.&nbsp;&nbsp;&nbsp;(@diffence дн. * @item.OverdueFine р.)</a>
+                        } 
+                    </td>
+                </tr>
+            }
+        </table>
+    } 
+
+</div>

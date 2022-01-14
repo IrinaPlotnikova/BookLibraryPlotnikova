@@ -1,0 +1,36 @@
+﻿@model LibraryPlotnikova.Models.ReaderModels.CreateReaderModel
+@{ ViewData["Title"] = "Create Reader"; }
+<link rel="stylesheet" href="~/css/create.css" />
+
+<div class="container">
+    <form asp-controller="Reader" asp-action="CreateFromModel">
+        @Html.HiddenFor(x => x.Id)
+
+        <div class="input-block">
+            <label>Имя</label>
+            <input asp-for="@Model.Name" placeholder="Введите имя" maxlength="35" size="40" autofocus autocomplete="off"/>
+            <span class="error-message" asp-validation-for="@Model.Name"></span>
+        </div>
+
+        <div class="input-block">
+            <label>Email</label>
+            <input asp-for="@Model.Email" placeholder="Введите email" maxlength="20" size="22" autocomplete="off"/>
+            <span class="error-message" asp-validation-for="@Model.Email"></span>
+        </div>
+
+        <div class="input-block">
+            <label>Паспорт</label>
+            <input asp-for="@Model.Passport" placeholder="Введите паспорт" maxlength="15" size="16" autocomplete="off"/>
+            <span class="error-message" asp-validation-for="@Model.Passport"></span>
+        </div>
+        
+        <input class="btn btn-dark" type="submit" />
+    </form>
+</div>
+
+
+@section scripts
+{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

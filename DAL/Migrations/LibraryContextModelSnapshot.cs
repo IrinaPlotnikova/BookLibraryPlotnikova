@@ -41,7 +41,7 @@ namespace DAL.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("CountryId")
+                    b.Property<int?>("CountryId")
                         .HasColumnType("integer");
 
                     b.Property<string>("FullName")
@@ -66,7 +66,10 @@ namespace DAL.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("GenreId")
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int?>("GenreId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
@@ -79,7 +82,7 @@ namespace DAL.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("integer");
 
-                    b.Property<int>("PublisherId")
+                    b.Property<int?>("PublisherId")
                         .HasColumnType("integer");
 
                     b.Property<int>("PublishmentYear")
@@ -101,10 +104,10 @@ namespace DAL.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("BookCopyId")
+                    b.Property<int?>("BookCopyId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("DateBookReturned")
+                    b.Property<DateTime?>("DateBookReturned")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DateFinish")
@@ -113,13 +116,10 @@ namespace DAL.Migrations
                     b.Property<DateTime>("DateStart")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("LostBookFine")
-                        .HasColumnType("integer");
-
                     b.Property<int>("OverdueFine")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ReaderId")
+                    b.Property<int?>("ReaderId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -138,10 +138,13 @@ namespace DAL.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("BookId")
+                    b.Property<int?>("BookId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("BookStatusId")
+                    b.Property<int?>("BookStatusId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ReaderId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -149,6 +152,8 @@ namespace DAL.Migrations
                     b.HasIndex("BookId");
 
                     b.HasIndex("BookStatusId");
+
+                    b.HasIndex("ReaderId");
 
                     b.ToTable("BookCopies");
                 });
@@ -211,20 +216,25 @@ namespace DAL.Migrations
                     b.Property<int>("AmountOfMoney")
                         .HasColumnType("integer");
 
-                    b.Property<int>("BookCheckoutId")
+                    b.Property<int?>("BookCopyId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("MoneyTransactionTypeId")
+                    b.Property<int?>("MoneyTransactionTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ReaderId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookCheckoutId");
+                    b.HasIndex("BookCopyId");
 
                     b.HasIndex("MoneyTransactionTypeId");
+
+                    b.HasIndex("ReaderId");
 
                     b.ToTable("MoneyTransactions");
                 });
@@ -252,7 +262,7 @@ namespace DAL.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("CountryId")
+                    b.Property<int?>("CountryId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
@@ -274,20 +284,16 @@ namespace DAL.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Email")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("LibraryCard")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
 
                     b.Property<string>("Passport")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.HasKey("Id");
 
@@ -314,8 +320,7 @@ namespace DAL.Migrations
                     b.HasOne("Domain.Entities.Country", "Country")
                         .WithMany("Authors")
                         .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Country");
                 });
@@ -325,14 +330,12 @@ namespace DAL.Migrations
                     b.HasOne("Domain.Entities.Genre", "Genre")
                         .WithMany("Books")
                         .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Entities.Publisher", "Publisher")
                         .WithMany("Books")
                         .HasForeignKey("PublisherId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Genre");
 
@@ -344,14 +347,12 @@ namespace DAL.Migrations
                     b.HasOne("Domain.Entities.BookCopy", "BookCopy")
                         .WithMany("BookCheckouts")
                         .HasForeignKey("BookCopyId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Entities.Reader", "Reader")
                         .WithMany("BookCheckouts")
                         .HasForeignKey("ReaderId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("BookCopy");
 
@@ -363,37 +364,46 @@ namespace DAL.Migrations
                     b.HasOne("Domain.Entities.Book", "Book")
                         .WithMany("BookCopies")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Entities.BookStatus", "BookStatus")
                         .WithMany("BookCopies")
-                        .HasForeignKey("BookStatusId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .HasForeignKey("BookStatusId");
+
+                    b.HasOne("Domain.Entities.Reader", "Reader")
+                        .WithMany("BookCopies")
+                        .HasForeignKey("ReaderId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Book");
 
                     b.Navigation("BookStatus");
+
+                    b.Navigation("Reader");
                 });
 
             modelBuilder.Entity("Domain.Entities.MoneyTransaction", b =>
                 {
-                    b.HasOne("Domain.Entities.BookCheckout", "BookCheckout")
+                    b.HasOne("Domain.Entities.BookCopy", "BookCopy")
                         .WithMany("MoneyTransactions")
-                        .HasForeignKey("BookCheckoutId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .HasForeignKey("BookCopyId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Entities.MoneyTransactionType", "MoneyTransactionType")
                         .WithMany("MoneyTransactions")
                         .HasForeignKey("MoneyTransactionTypeId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
-                    b.Navigation("BookCheckout");
+                    b.HasOne("Domain.Entities.Reader", "Reader")
+                        .WithMany("MoneyTransactions")
+                        .HasForeignKey("ReaderId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("BookCopy");
 
                     b.Navigation("MoneyTransactionType");
+
+                    b.Navigation("Reader");
                 });
 
             modelBuilder.Entity("Domain.Entities.Publisher", b =>
@@ -401,8 +411,7 @@ namespace DAL.Migrations
                     b.HasOne("Domain.Entities.Country", "Country")
                         .WithMany("Publishers")
                         .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Country");
                 });
@@ -412,14 +421,11 @@ namespace DAL.Migrations
                     b.Navigation("BookCopies");
                 });
 
-            modelBuilder.Entity("Domain.Entities.BookCheckout", b =>
-                {
-                    b.Navigation("MoneyTransactions");
-                });
-
             modelBuilder.Entity("Domain.Entities.BookCopy", b =>
                 {
                     b.Navigation("BookCheckouts");
+
+                    b.Navigation("MoneyTransactions");
                 });
 
             modelBuilder.Entity("Domain.Entities.BookStatus", b =>
@@ -452,6 +458,10 @@ namespace DAL.Migrations
             modelBuilder.Entity("Domain.Entities.Reader", b =>
                 {
                     b.Navigation("BookCheckouts");
+
+                    b.Navigation("BookCopies");
+
+                    b.Navigation("MoneyTransactions");
                 });
 #pragma warning restore 612, 618
         }

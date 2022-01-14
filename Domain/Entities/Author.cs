@@ -12,7 +12,7 @@ namespace Domain.Entities
 
         public string ShortName { get; set; }
 
-        public int CountryId { get; set; }
+        public int? CountryId { get; set; }
 
         public Country Country { get; set; }
 

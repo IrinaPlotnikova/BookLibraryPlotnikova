@@ -1,0 +1,59 @@
+﻿@model LibraryPlotnikova.Models.BookModels.BookInfoModel
+@{ ViewData["Title"] = "Book Info"; }
+<link rel="stylesheet" href="~/css/info.css" />
+
+<div class="container">
+    <table>
+        <tr>
+            <th><h3>@Model.Book.Name</h3></th>
+            <th><a href="@Url.Action("Change", "Book", new { id = @Model.Book.Id })">&#9999;</a></th>
+        </tr>
+    </table>
+
+     @if (Model.Book.Authors.Count() != 0)
+     {
+         int i = 1;
+
+         <br />
+         <div class="info-block">
+             <div class="info-header">Авторы</div>
+             @foreach (var item in Model.Book.Authors)
+             {
+                 <div>@i. @Html.ActionLink($"{item.FullName}", "Info", "Author", new { id = @item.Id })</div>
+                 i++;
+             }
+         </div>
+     }  
+
+
+     @if(Model.BookCopiesReader.Count() != 0) 
+     { 
+         <br />
+         <div class="info-block">
+             <div class="info-header">Id выданных копий</div>
+             @foreach (var item in Model.BookCopiesReader)
+             {
+                 <div>
+                     №@item.Id  @Html.ActionLink($"{item.Reader?.Name}", "Info", "Reader", new { id = @item.ReaderId })
+                 </div> 
+             }
+         </div>
+     }
+
+
+     @if(Model.BookCopiesLibrary.Count() != 0) 
+     { 
+         <br />
+         <div class="info-block">
+             <div class="info-header">Id копий в библиотеке</div>
+             @foreach (var item in Model.BookCopiesLibrary)
+             {
+                 <label>№@item.Id </label>
+             }
+         </div>
+     }
+
+</div>
+
+
+

@@ -18,22 +18,28 @@ namespace DAL.Repositories
         public override async Task<ICollection<Reader>> GetAllAsync()
         {
             return await Context.Readers
-                .Include(e => e.BookCheckouts)
+                .Include(e => e.BookCheckouts).ThenInclude(bc =>bc.BookCopy).ThenInclude(copy => copy.Book)
+                .Include(e => e.MoneyTransactions)
+                .Include(e => e.BookCopies).ThenInclude(bc =>bc.Book)
                 .ToListAsync();
         }
 
         public override async Task<ICollection<Reader>> GetByFilterAsync(Expression<Func<Reader, bool>> expression)
         {
             return await Context.Readers
+                .Include(e => e.BookCheckouts).ThenInclude(bc =>bc.BookCopy).ThenInclude(copy => copy.Book)
+                .Include(e => e.MoneyTransactions)
+                .Include(e => e.BookCopies).ThenInclude(bc =>bc.Book)
                 .Where(expression)
-                .Include(e => e.BookCheckouts)
                 .ToListAsync();
         }
 
         public override async Task<Reader> GetByIdAsync(int id)
         {
             return await Context.Readers
-                .Include(e => e.BookCheckouts)
+                .Include(e => e.BookCheckouts).ThenInclude(bc =>bc.BookCopy).ThenInclude(copy => copy.Book)
+                .Include(e => e.MoneyTransactions)
+                .Include(e => e.BookCopies).ThenInclude(bc =>bc.Book)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
     }

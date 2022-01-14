@@ -17,9 +17,6 @@ namespace DAL.Mappers
 
             builder.Property(g => g.Name).HasMaxLength(100);
 
-            builder.HasMany(g => g.Books)
-                .WithOne(b => b.Genre)
-                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

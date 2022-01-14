@@ -23,9 +23,6 @@ namespace DAL.Mappers
                 .WithMany(r => r.BookCheckouts)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            builder.HasMany(bc => bc.MoneyTransactions)
-                .WithOne(mt => mt.BookCheckout)
-                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

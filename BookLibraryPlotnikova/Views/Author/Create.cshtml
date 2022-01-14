@@ -1,0 +1,40 @@
+﻿@model LibraryPlotnikova.Models.CreateAuthorModel
+@{ 
+    ViewData["Title"] = "Create Author"; 
+}
+<link rel="stylesheet" href="~/css/create.css" />
+
+
+<div class="container">
+    <form asp-controller="Author" asp-action="CreateFromModel">
+        @Html.HiddenFor(x => x.Id)
+
+        <div class="input-block">
+            <label asp-for="@Model.FullName">Полное имя</label>
+            <input asp-for="@Model.FullName" maxlength="35" size="40" placeholder="Введите полное имя" autofocus autocomplete="off" />
+            <span class="error-message" asp-validation-for="@Model.FullName"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="@Model.ShortName">Сокращенное имя</label>
+            <input asp-for="@Model.ShortName" maxlength="20" size="22" placeholder="Введите краткое имя" autocomplete="off" />
+            <span class="error-message" asp-validation-for="@Model.ShortName"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="@Model.CountryId">Страна</label>
+            @Html.DropDownListFor(e => e.CountryId, Model.AvailableCountries)
+        </div>
+        <input class="btn btn-dark" type="submit" />
+    </form>
+</div>
+
+@section scripts
+{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+
+
+

@@ -8,11 +8,11 @@ namespace Domain.Entities
 {
     public class BookCheckout : BaseEntity
     {
-        public int BookCopyId { get; set; }
+        public int? BookCopyId { get; set; }
 
         public BookCopy BookCopy { get; set; }
 
-        public int ReaderId { get; set; }
+        public int? ReaderId { get; set; }
 
         public Reader Reader { get; set; }
 
@@ -20,13 +20,8 @@ namespace Domain.Entities
 
         public DateTime DateFinish { get; set; }
 
-        public DateTime DateBookReturned { get; set; }
-
-        public int LostBookFine { get; set; }
+        public DateTime? DateBookReturned { get; set; }
 
         public int OverdueFine { get; set; }
-
-        public ICollection<MoneyTransaction> MoneyTransactions { get; set; } = new List<MoneyTransaction>();
-
     }
 }

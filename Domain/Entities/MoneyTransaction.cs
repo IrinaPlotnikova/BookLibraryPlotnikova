@@ -12,12 +12,16 @@ namespace Domain.Entities
 
         public DateTime Date { get; set; }
 
-        public int MoneyTransactionTypeId { get; set; }
+        public int? MoneyTransactionTypeId { get; set; }
 
         public MoneyTransactionType MoneyTransactionType { get; set; }
 
-        public int BookCheckoutId { get; set; }
+        public int? BookCopyId { get; set; }
 
-        public BookCheckout BookCheckout { get; set; }
+        public BookCopy BookCopy { get; set; }
+
+        public int? ReaderId { get; set; }
+
+        public Reader Reader { get; set; }
     }
 }

@@ -35,7 +35,7 @@ namespace DAL
 
         public LibraryContext(DbContextOptions<LibraryContext> options) : base(options)
         {
-           // Database.EnsureCreated();
+            Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -47,17 +47,10 @@ namespace DAL
             modelBuilder.ApplyConfiguration(new BookStatusConfiguration());
             modelBuilder.ApplyConfiguration(new CountryConfiguration());
             modelBuilder.ApplyConfiguration(new GenreConfiguration());
+            modelBuilder.ApplyConfiguration(new MoneyTransactionConfiguration());
             modelBuilder.ApplyConfiguration(new MoneyTransactionTypeConfiguration());
             modelBuilder.ApplyConfiguration(new PublisherConfiguration());
             modelBuilder.ApplyConfiguration(new ReaderConfiguration());
         }
-
-
-     /*   protected override void OnConfiguring(DbContextOptionsBuilder options)
-        {
-            Console.WriteLine("OnConfiguring");
-            //options.UseNpgsql("Host=localhost;Database=postgres;Port=5432;Username=postgres;Password=12345678"); 
-         //   options.UseNpgsql("Server=localhost;Database=ppp;Port=5433;Username=postgres;Password=postgres");
-        }*/
     }
 }

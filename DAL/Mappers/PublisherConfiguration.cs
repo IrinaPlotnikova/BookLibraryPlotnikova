@@ -20,10 +20,6 @@ namespace DAL.Mappers
             builder.HasOne(p => p.Country)
                 .WithMany(c => c.Publishers)
                 .OnDelete(DeleteBehavior.SetNull);
-
-            builder.HasMany(p => p.Books)
-                .WithOne(b => b.Publisher)
-                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

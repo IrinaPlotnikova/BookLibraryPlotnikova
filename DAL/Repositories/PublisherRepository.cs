@@ -15,6 +15,8 @@ namespace DAL.Repositories
         public PublisherRepository(LibraryContext context) : base(context)
         {
         }
+
+
         public override async Task<ICollection<Publisher>> GetAllAsync()
         {
             return await Context.Publishers
@@ -26,9 +28,9 @@ namespace DAL.Repositories
         public override async Task<ICollection<Publisher>> GetByFilterAsync(Expression<Func<Publisher, bool>> expression)
         {
             return await Context.Publishers
-                .Where(expression)
                 .Include(e => e.Country)
                 .Include(e => e.Books)
+                .Where(expression)
                 .ToListAsync();
         }
 

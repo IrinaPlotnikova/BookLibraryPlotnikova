@@ -1,0 +1,60 @@
+﻿@model ICollection<Domain.Entities.Reader>
+@{ ViewData["Title"] = "Readers"; }
+
+<link rel="stylesheet" href="~/css/index.css" />
+
+
+<div class="container">
+    <table>
+        <tr>
+            <th><h3>Читатели</h3></th>
+            <th>
+                <form method="get" asp-controller="Reader" asp-action="Create">
+                    <button type="submit" class="btn btn-outline-dark">Добавить читателя</button>
+                </form>
+            </th>
+        </tr>
+    </table>
+
+    <table class="main_table">
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Паспорт</th>
+                <th>Email</th>
+                <th>Книги</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in @Model)
+            {
+                int numberOfBooks = item.BookCheckouts.Count(e => e.DateBookReturned == null);
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Passport</td>
+                    <td>@item.Email</td>
+                    <td>@item.BookCheckouts.Count(bc => bc.DateBookReturned == null) шт.</td> 
+                    <td>@Html.ActionLink("Выдать", "GiveBooks", new { readerId = item.Id})</td>
+                    <td>
+                        @if (numberOfBooks != 0)
+                        {
+                            @Html.ActionLink("Принять", "TakeBooks", new { readerId = item.Id})
+                        }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Info", "Reader", new { id = @item.Id })">&#128269;</a>
+                        <a href="@Url.Action("Change", "Reader", new { id = @item.Id })">&#9999;</a>
+                        @if (numberOfBooks == 0)
+                        {
+                            <a href="@Url.Action("Delete", "Reader", new { id = @item.Id })">&#10060;</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>     
+</div>

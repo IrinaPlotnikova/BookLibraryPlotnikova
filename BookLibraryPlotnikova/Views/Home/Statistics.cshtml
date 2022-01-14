@@ -1,0 +1,27 @@
+﻿@model LibraryPlotnikova.Models.StatisticsModel
+
+<link rel="stylesheet" href="~/css/info.css" />
+
+<form asp-action="SaveStatistics" asp-controller="Statistics">
+    <table>
+        <tr>
+            <td>Начало периода </td>
+            <td><input asp-for="@Model.DateFilter.FirstDate" /></td>
+        </tr>
+        <tr>
+            <td>Конец периода </td>
+            <td><input asp-for="@Model.DateFilter.LastDate" /></td>
+        </tr>
+    </table>
+
+
+    @foreach (var type in Model.AvailableStatisticsTypes)
+    {
+        <div class="info-block">
+            @Html.RadioButtonFor(model => model.StatisticsType, type) @type<br />
+        </div>
+    }
+
+
+    <input type="submit" class="btn btn-outline-dark" value="Скачать статистику" />
+</form>

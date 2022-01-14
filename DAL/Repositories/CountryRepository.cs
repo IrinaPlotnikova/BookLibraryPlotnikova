@@ -25,8 +25,8 @@ namespace DAL.Repositories
         public override async Task<ICollection<Country>> GetByFilterAsync(Expression<Func<Country, bool>> expression)
         {
             return await Context.Countries
-                .Where(expression)
                 .Include(e => e.Authors)
+                .Where(expression)
                 .ToListAsync();
         }
 

@@ -1,0 +1,75 @@
+﻿@model LibraryPlotnikova.Models.AllPublishersModel
+@{ 
+    ViewData["Title"] = "Publishers";
+}
+<link rel="stylesheet" href="~/css/index.css" />
+
+<div class="container">
+    <div class="row justify-content-between">
+        <div class="col-auto">
+            <table>
+                <tr>
+                    <th><h3>Издатели</h3></th>
+                    <th>
+                        <form method="get" asp-controller="Publisher" asp-action="Create">
+                            <button type="submit" class="btn btn-outline-dark">Добавить издателя</button>
+                        </form>
+                    </th>
+                </tr>
+            </table>
+
+            <table class="main_table">
+                <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th>Книги</th>
+                        <th>Страна</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in @Model.Publishers)
+                    {
+                        int numberOfBooks = item.Books.Count();
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@numberOfBooks</td>
+                            <td>@item.Country.Name</td>
+                            <td>
+                                <a href="@Url.Action("Info", "Publisher", new { id = @item.Id })">&#128269;</a>
+                                <a href="@Url.Action("Change", "Publisher", new { id = @item.Id })">&#9999;</a>
+                                <a href="@Url.Action("Delete", "Publisher", new { id = @item.Id })">&#10060;</a>
+                            </td>
+                        </tr>
+                     }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-auto">
+            <form asp-controller="Publisher" asp-action="IndexWithFilter">
+                <h3>Фильтры</h3>
+                <h5>Страны</h5>
+                <div class="filter-block">
+                    @foreach (var item in @Model.AvailableCountries)
+                    {
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"
+                                       name="PublisherFilter.CountriesId"
+                                       value="@item.Value"
+                                       checked="@item.Selected" />
+                                @item.Text
+                            </label>
+                        </div>
+                    }
+                </div>
+                
+                <button type="submit" class="btn btn-dark">Обновить</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
