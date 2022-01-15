@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : BaseEntity
+    public class Repository<T> : IRepository<T> where T : class, IBaseEntity
     {
         protected LibraryContext Context { get; }
         private readonly DbSet<T> table;

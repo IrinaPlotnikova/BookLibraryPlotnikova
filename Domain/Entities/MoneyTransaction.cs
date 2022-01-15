@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class MoneyTransaction : BaseEntity
+    public class MoneyTransaction : IBaseEntity
     {
+        public int Id { get; set; }
+
         public int AmountOfMoney { get; set; }
 
         public DateTime Date { get; set; }

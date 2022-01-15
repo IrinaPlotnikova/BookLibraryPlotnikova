@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class BookStatus : BaseEntity
+    public class BookStatus : IBaseEntity
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public ICollection<BookCopy> BookCopies { get; set; } = new List<BookCopy>();

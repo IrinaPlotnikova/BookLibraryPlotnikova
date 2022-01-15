@@ -13,11 +13,13 @@ namespace BLL.Services
 {
     public class BookCheckoutService : IBookCheckoutService
     {
-        IRepository<BookCheckout> repository;
+        private readonly IRepository<BookCheckout>  repository;
+
         public BookCheckoutService(IRepository<BookCheckout> repository)
         {
             this.repository = repository;
         }
+
         public Task AddBookCheckout(BookCheckout bookCheckout)
         {
             return repository.CreateAsync(bookCheckout);

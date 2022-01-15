@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LibraryPlotnikova.Models.ReaderModels
 {
-    public class ReturnBooksModel
+    public class TakeBooksModel
     {
         public Reader Reader { get; set;} = new Reader();
 

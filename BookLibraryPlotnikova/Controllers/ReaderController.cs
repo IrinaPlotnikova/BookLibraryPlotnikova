@@ -107,7 +107,7 @@ namespace LibraryPlotnikova.Controllers
         [HttpGet]
         public async Task<IActionResult> GiveBooks(int readerId)
         {
-            GetBooksModel model = new GetBooksModel()
+            GiveBooksModel model = new GiveBooksModel()
             {
                 Reader = await readerService.GetReaderById(readerId),
                 AvailableBooks = (await bookService.GetAvailableBooks()).Select(e => new SelectListItem() { Value = e.Id.ToString(), Text = e.Name }),
@@ -116,7 +116,7 @@ namespace LibraryPlotnikova.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GiveBooks(GetBooksModel model)
+        public async Task<IActionResult> GiveBooks(GiveBooksModel model)
         {
             DateTime dateStart = DateTime.Today;
             DateTime dateFinish = dateStart.AddMonths(3);
@@ -151,7 +151,7 @@ namespace LibraryPlotnikova.Controllers
         public async Task<IActionResult> TakeBooks(int readerId)
         {
             Reader reader = await readerService.GetReaderById(readerId);
-            ReturnBooksModel model = new ReturnBooksModel()
+            TakeBooksModel model = new TakeBooksModel()
             {
                 Reader = reader,
                 AvailableBookCheckouts = reader.BookCheckouts.Where(e => e.DateBookReturned == null).Select(e => new SelectListItem() 
@@ -164,7 +164,7 @@ namespace LibraryPlotnikova.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> TakeBooks(ReturnBooksModel model)
+        public async Task<IActionResult> TakeBooks(TakeBooksModel model)
         {
             DateTime today = DateTime.Today;
             foreach(int bookCheckoutId in model.SelectedBookCheckoutsId)

@@ -52,7 +52,7 @@ namespace BLL.Services
         {
             bool isEmpty = filter.CountriesId.Count == 0;
             Expression<Func<Author, bool>> expression = e => isEmpty || filter.CountriesId.Contains(e.CountryId);
-            return repository.GetByFilterAsync(expression); // repository.GetByFilterAsync(expression);
+            return repository.GetByFilterAsync(expression); 
         }
 
         public Task<ICollection<Author>> GetAuthorsById(AuthorFilter filter)
