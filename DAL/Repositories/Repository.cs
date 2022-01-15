@@ -28,13 +28,13 @@ namespace DAL.Repositories
             await Context.SaveChangesAsync();
         }
 
-        public async Task CreateAsync(ICollection<T> items)
+        public async Task CreateRangeAsync(IEnumerable<T> items)
         {
             foreach(T item in items)
             {
-                await table.AddAsync(item);
-                await Context.SaveChangesAsync();
+                 await table.AddAsync(item);
             }
+            await Context.SaveChangesAsync();
         }
 
         public async Task<T> DeleteItemAsync(int id)
@@ -63,13 +63,6 @@ namespace DAL.Repositories
         public async Task UpdateItemAsync(T item)
         {
             table.Update(item);
-            await Context.SaveChangesAsync();
-        }
-
-        public virtual async Task DelteByFilterAsync(Expression<Func<T, bool>> expression)
-        {
-            var items = await table.Where(expression).ToListAsync();
-            table.RemoveRange(items);
             await Context.SaveChangesAsync();
         }
     }
