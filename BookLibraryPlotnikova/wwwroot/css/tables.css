@@ -1,0 +1,21 @@
+﻿.main_table_header {
+    font-weight: 700;
+}
+
+.main_table {
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+}
+
+.main_table tr:hover {
+    background-color: lightgray;
+}
+
+td {
+    padding-right: 2vh;
+}
+
+th {
+    padding-right: 2vh;
+}
+

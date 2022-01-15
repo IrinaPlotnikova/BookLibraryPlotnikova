@@ -12,18 +12,6 @@
     overflow-y: auto;
 }
 
-td {
-    padding-right: 2vh;
-}
-
-th {
-    padding-right: 2vh;
-}
-
 .info-header{
     font-weight:700;
-}
-
-.main-table tr:hover {
-    background-color: lightgray
 }

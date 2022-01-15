@@ -14,7 +14,7 @@ namespace Domain.RepositoryInterfaces
 
         public Task CreateAsync(T item);
 
-        public Task CreateRangeAsync(Iterable<T> items);
+        public Task CreateRangeAsync(IEnumerable<T> items);
 
         public Task UpdateItemAsync(T item);
 

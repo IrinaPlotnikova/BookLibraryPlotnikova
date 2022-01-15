@@ -2,8 +2,8 @@
 @{
     ViewData["Title"] = "Authors";
 }
-
-<link rel="stylesheet" href="~/css/index.css" />
+<link rel="stylesheet" href="~/css/tables.css" />
+<link rel="stylesheet" href="~/css/filters.css" />
 
 
 <div class="container">
@@ -40,8 +40,8 @@
                             <td>@item.Country.Name</td>
                             <td>
                                 <a href="@Url.Action("Info", "Author", new { id = @item.Id })">&#128269;</a>
-                                <a href="@Url.Action("Change", "Author", new { id = @item.Id })">&#9999;</a>
-                                <a href="@Url.Action("Delete", "Author", new { id = @item.Id })">&#10060;</a>
+                                <a href="@Url.Action("Update", "Author", new { id = @item.Id })">&#9999;</a>
+                                <a href="@Url.Action("DeletionAttempt", "Author", new { id = @item.Id })">&#10060;</a>
                             </td>
                         </tr>
                      }
@@ -50,7 +50,7 @@
         </div>
 
         <div class="col-auto">
-            <form asp-controller="Author" asp-action="IndexWithFilter">
+            <form asp-controller="Author" asp-action="Index" method="get">
                 <h3>Фильтры</h3>
                 <h5>Страны</h5>
                 <div class="filter-block">

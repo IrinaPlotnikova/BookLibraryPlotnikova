@@ -1,0 +1,11 @@
+﻿.filter-block {
+    max-height: 20vh;
+    overflow-y: auto;
+    margin-bottom: 1vh;
+    font-size: smaller;
+}
+
+.filter-line {
+    margin-bottom: 1vh;
+    font-size: smaller;
+}

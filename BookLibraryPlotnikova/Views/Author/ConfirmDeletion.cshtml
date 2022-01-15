@@ -1,0 +1,19 @@
+﻿@model Domain.Entities.Author
+@{ ViewData["Title"] = "Author - Confirm deletion"; }
+
+<link rel="stylesheet" href="~/css/info.css" />
+<link rel="stylesheet" href="~/css/index.css" />
+
+
+<div class="container">
+    <div class="info-block"><a class="info-header">Полное имя</a> @Model.FullName</div>
+    <div class="info-block"><a class="info-header">Краткое имя</a> @Model.ShortName</div>
+    <div class="info-block"><a class="info-header">Страна</a> @Model.Country.Name</div>
+    <div class="info-block"><a class="info-header">Кол-во книг</a> @Model.Books.Count()</div>
+
+    <form method="get" asp-controller="Author" asp-action="Delete" asp-route-id="@Model.Id">
+        <button type="submit" class="btn btn-outline-danger">Удалить</button>
+    </form>
+</div>
+
+
