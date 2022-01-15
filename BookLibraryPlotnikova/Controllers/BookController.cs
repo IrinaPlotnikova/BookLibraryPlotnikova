@@ -182,6 +182,17 @@ namespace LibraryPlotnikova.Controllers
             await moneyTransactionService.AddMoneyTransaction(transaction);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                await bookService.DeleteBook(id);
+            }
+            catch (Exception) { } // повторное удаление
+            return RedirectToAction("Index");
+        }
+
         [AcceptVerbs("Get", "Post")]
         public async Task<IActionResult> VerifyName(string name, int id)
         {
