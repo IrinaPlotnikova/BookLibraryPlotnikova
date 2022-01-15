@@ -22,6 +22,8 @@ namespace Domain.Entities
 
         public Reader Reader { get; set; }
 
+        public DateTime DateAdded { get; set; }
+
         public ICollection<BookCheckout> BookCheckouts { get; set; } = new List<BookCheckout>();
 
         public ICollection<MoneyTransaction> MoneyTransactions { get; set; } = new List<MoneyTransaction>();

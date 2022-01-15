@@ -99,7 +99,6 @@ namespace LibraryPlotnikova.Controllers
 
             if (bookFromModel.Id == 0)
             {
-                bookFromModel.DateAdded = DateTime.Today;
                 await bookService.AddBook(bookFromModel);
                 for (int i = 0; i < model.NumberOfCopies; i++)
                 {
@@ -170,14 +169,14 @@ namespace LibraryPlotnikova.Controllers
 
         private async Task AddBookCopyAsync(Book book)
         {
-            BookCopy bookCopy = new BookCopy() { BookId = book.Id, BookStatusId = 1 };
+            BookCopy bookCopy = new BookCopy() { BookId = book.Id, BookStatusId = 1, DateAdded = DateTime.Today };
             await bookCopyService.AddBookCopy(bookCopy);
             MoneyTransaction transaction = new MoneyTransaction()
             {
                 BookCopyId = bookCopy.Id,
                 MoneyTransactionTypeId = 1,
                 AmountOfMoney = book.Price,
-                Date = book.DateAdded
+                Date = bookCopy.DateAdded
             };
             await moneyTransactionService.AddMoneyTransaction(transaction);
         }

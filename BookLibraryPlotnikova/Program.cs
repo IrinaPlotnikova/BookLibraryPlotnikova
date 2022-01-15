@@ -15,16 +15,7 @@ namespace BookLibraryPlotnikova
     {
         public static void Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
-
-            using (var scope = host.Services.CreateScope())
-            {
-                var context = scope.ServiceProvider.GetRequiredService<LibraryContext>();
-                SampleData.Initialize(context);
-            }
-
-            host.Run();
-
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

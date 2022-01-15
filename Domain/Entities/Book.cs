@@ -15,8 +15,6 @@ namespace Domain.Entities
 
         public int Price { get; set; }
 
-        public DateTime DateAdded { get; set; }
-
         public int? GenreId { get; set; }
 
         public Genre Genre { get; set; }

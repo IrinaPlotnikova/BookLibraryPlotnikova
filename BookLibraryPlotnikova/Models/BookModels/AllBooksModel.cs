@@ -10,7 +10,7 @@ namespace LibraryPlotnikova.Models.BookModels
 {
     public class AllBooksModel
     {
-         public ICollection<Book> Books { get; set; } = new List<Book>();
+        public ICollection<Book> Books { get; set; } = new List<Book>();
 
         public IEnumerable<SelectListItem> AvailableGenres { get; set; } = new List<SelectListItem>();
 
