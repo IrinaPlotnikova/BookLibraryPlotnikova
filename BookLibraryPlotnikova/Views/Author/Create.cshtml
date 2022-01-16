@@ -1,10 +1,10 @@
 ﻿@model LibraryPlotnikova.Models.CreateAuthorModel
 @{ ViewData["Title"] = "Author - Create"; }
 <link rel="stylesheet" href="~/css/create.css" />
-
+<link rel="stylesheet" href="~/css/tables.css" />
 
 <div class="container">
-    <form asp-controller="Author" asp-action="CreateFromModel">
+    <form asp-controller="Author">
         <div class="input-block">
             <label>Полное имя</label>
             <input asp-for="@Model.FullName" maxlength="35" size="40" placeholder="Введите полное имя" autofocus autocomplete="off" />
@@ -21,7 +21,19 @@
             <label>Страна</label>
             @Html.DropDownListFor(e => e.CountryId, Model.AvailableCountries)
         </div>
-        <input class="btn btn-dark" type="submit" value="Сохранить" />
+
+        <table>
+            <tr>
+                <td>
+                    <input type="submit" asp-action="CreateFromModel" formmethod="post"
+                           class="btn btn-outline-success" value="Сохранить"/>
+                </td>
+                <td>
+                    <input type="submit" asp-action="Index" formmethod="get" formnovalidate
+                           class="btn btn-outline-dark" value="Отмена" />
+                </td>
+            </tr>
+        </table>
     </form>
 </div>
 

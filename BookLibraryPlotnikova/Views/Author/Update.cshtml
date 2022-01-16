@@ -1,10 +1,10 @@
 ﻿@model LibraryPlotnikova.Models.AuthorModels.UpdateAuthorModel
 @{ ViewData["Title"] = "Author - Update"; }
 <link rel="stylesheet" href="~/css/create.css" />
-
+<link rel="stylesheet" href="~/css/tables.css" />
 
 <div class="container">
-    <form asp-controller="Author" asp-action="UpdateFromModel">
+    <form asp-controller="Author">
         @Html.HiddenFor(m => m.Id)
 
         <div class="input-block">
@@ -23,7 +23,19 @@
             <label>Страна</label>
             @Html.DropDownListFor(e => e.CountryId, Model.AvailableCountries)
         </div>
-        <input class="btn btn-dark" type="submit" value="Сохранить" />
+
+        <table>
+            <tr>
+                <td>
+                    <input type="submit" asp-action="UpdateFromModel" formmethod="post"
+                           class="btn btn-outline-success" value="Сохранить" />
+                </td>
+                <td>
+                    <input type="submit" asp-action="Info" formmethod="get" formnovalidate
+                           class="btn btn-outline-dark" value="Отмена" />
+                </td>
+            </tr>
+        </table>
     </form>
 </div>
 
