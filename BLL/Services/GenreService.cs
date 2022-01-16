@@ -11,7 +11,7 @@ namespace BLL.Services
 {
     public class GenreService : IGenreService
     {
-        IRepository<Genre> repository;
+        private readonly IRepository<Genre> repository;
 
         public GenreService(IRepository<Genre> repository)
         {

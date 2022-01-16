@@ -26,6 +26,6 @@ namespace BLL.Interfaces
 
         public Task<ICollection<Author>> GetAuthorsById(AuthorFilter filter);
 
-       public Task<ICollection<Author>> GetAuthorsByFullName(string fullName);
+        public Task<ICollection<Author>> GetAuthorsByFullName(string fullName);
     }
 }

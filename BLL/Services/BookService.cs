@@ -13,11 +13,13 @@ namespace BLL.Services
 {
     public class BookService : IBookService
     {
-        IRepository<Book> repository;
+        private readonly IRepository<Book> repository;
+
         public BookService(IRepository<Book> repository)
         {
             this.repository = repository;
         }
+
         public Task AddBook(Book book)
         {
             return repository.CreateAsync(book);

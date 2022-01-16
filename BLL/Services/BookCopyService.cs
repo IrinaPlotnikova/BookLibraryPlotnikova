@@ -13,13 +13,12 @@ namespace BLL.Services
     public class BookCopyService : IBookCopyService
     {
 
-        IRepository<BookCopy> repository;
+        private readonly IRepository<BookCopy> repository;
 
         public BookCopyService(IRepository<BookCopy> repository)
         {
             this.repository = repository;
         }
-
 
         public Task AddBookCopy(BookCopy bookCopy)
         {

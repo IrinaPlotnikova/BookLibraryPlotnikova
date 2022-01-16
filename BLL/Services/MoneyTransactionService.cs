@@ -13,7 +13,7 @@ namespace BLL.Services
 {
     public class MoneyTransactionService : IMoneyTransactionService
     {
-        IRepository<MoneyTransaction> repository;
+        private readonly IRepository<MoneyTransaction> repository;
 
         public MoneyTransactionService(IRepository<MoneyTransaction> repository)
         {

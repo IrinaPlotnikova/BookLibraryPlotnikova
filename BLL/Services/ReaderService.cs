@@ -14,11 +14,13 @@ namespace BLL.Services
 {
     public class ReaderService : IReaderService
     {
-        IRepository<Reader> repository;
+        private readonly IRepository<Reader> repository;
+
         public ReaderService(IRepository<Reader> repository)
         {
             this.repository = repository;
         }
+
         public Task CreateReader(Reader reader)
         {
             return repository.CreateAsync(reader);
