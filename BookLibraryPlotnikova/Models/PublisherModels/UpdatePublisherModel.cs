@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace LibraryPlotnikova.Models
+namespace LibraryPlotnikova.Models.PublisherModels
 {
-    public class CreatePublisherModel
+    public class UpdatePublisherModel
     {
+        public int Id { get; set; }
+
         [Required (ErrorMessage = "Не указано название")]
         public string Name { get ; set;} = "";
 

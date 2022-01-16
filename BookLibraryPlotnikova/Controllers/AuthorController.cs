@@ -139,21 +139,13 @@ namespace LibraryPlotnikova.Controllers
             return View("Info", author);
         }
 
-
-        [AcceptVerbs("Get", "Post")]
-        public async Task<IActionResult> VerifyFullName(string fullName, int id)
-        {
-            IEnumerable<int> authorsId = (await authorService.GetAuthorsByFullName(fullName)).Select(e => e.Id);
-            return Json(!string.IsNullOrWhiteSpace(fullName) && fullName.Count() <= 100 && (!authorsId.Any() || authorsId.Contains(id)));
-        }
-
         private async Task<bool> VerifyAuthor(Author author)
         {
             IEnumerable<int> authorsId = (await authorService.GetAuthorsByFullName(author.FullName)).Select(e => e.Id);
             return !string.IsNullOrWhiteSpace(author.FullName) && author.FullName.Count() <= 100 &&
                 !string.IsNullOrWhiteSpace(author.ShortName) && author.ShortName.Count() <= 30 &&
                 (!authorsId.Any() || authorsId.Contains(author.Id)) &&
-                (author.CountryId == null || countryService.GetCountryById(author.CountryId.Value) != null);
+                (author.CountryId == null || await countryService.GetCountryById(author.CountryId.Value) != null);
         }
     }
 }

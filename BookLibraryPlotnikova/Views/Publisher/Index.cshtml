@@ -1,8 +1,9 @@
 ﻿@model LibraryPlotnikova.Models.AllPublishersModel
-@{ 
+@{
     ViewData["Title"] = "Publishers";
 }
-<link rel="stylesheet" href="~/css/index.css" />
+<link rel="stylesheet" href="~/css/tables.css" />
+<link rel="stylesheet" href="~/css/filters.css" />
 
 <div class="container">
     <div class="row justify-content-between">
@@ -37,17 +38,17 @@
                             <td>@item.Country.Name</td>
                             <td>
                                 <a href="@Url.Action("Info", "Publisher", new { id = @item.Id })">&#128269;</a>
-                                <a href="@Url.Action("Change", "Publisher", new { id = @item.Id })">&#9999;</a>
-                                <a href="@Url.Action("Delete", "Publisher", new { id = @item.Id })">&#10060;</a>
+                                <a href="@Url.Action("Update", "Publisher", new { id = @item.Id })">&#9999;</a>
+                                <a href="@Url.Action("DeletionAttempt", "Publisher", new { id = @item.Id })">&#10060;</a>
                             </td>
                         </tr>
-                     }
+                    }
                 </tbody>
             </table>
         </div>
 
         <div class="col-auto">
-            <form asp-controller="Publisher" asp-action="IndexWithFilter">
+            <form asp-controller="Publisher" asp-action="Index" method="get">
                 <h3>Фильтры</h3>
                 <h5>Страны</h5>
                 <div class="filter-block">
@@ -64,7 +65,7 @@
                         </div>
                     }
                 </div>
-                
+
                 <button type="submit" class="btn btn-dark">Обновить</button>
             </form>
         </div>

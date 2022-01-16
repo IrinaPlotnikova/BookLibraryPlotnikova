@@ -1,0 +1,27 @@
+﻿@model Domain.Entities.Publisher
+@{ ViewData["Title"] = "Publisher - Confirm deletion"; }
+<link rel="stylesheet" href="~/css/info.css" />
+<link rel="stylesheet" href="~/css/tables.css" />
+
+<div class="container">
+    <div class="info-block"><a class="info-header">Название</a> @Model.Name</div>
+    <div class="info-block"><a class="info-header">Страна</a> @Model.Country.Name</div>
+    <div class="info-block"><a class="info-header">Кол-во книг</a> @Model.Books.Count()</div>
+
+    <table>
+        <tr>
+            <td>
+                <form method="get" asp-controller="Publisher" asp-action="Delete" asp-route-id="@Model.Id">
+                    <button type="submit" class="btn btn-outline-danger">Удалить</button>
+                </form>
+            </td>
+            <td>
+                <form method="get" asp-controller="Publisher" asp-action="Index">
+                    <button type="submit" class="btn btn-outline-dark">Отмена</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+
+

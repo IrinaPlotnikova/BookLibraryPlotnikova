@@ -6,12 +6,14 @@
 <div class="container">
     <table>
         <tr>
-            <th>@Html.ActionLink("Назад ко всем авторам", "Index", "Author")</th>
+            <th colspan="2">@Html.ActionLink("Назад ко всем авторам", "Index", "Author")</th>
         </tr>
         <tr>
             <th><h3>@Model.FullName (@Model.ShortName)</h3></th>
-            <th><a href="@Url.Action("Update", "Author", new { id = Model.Id })">&#9999;</a></th>
-            <th><a href="@Url.Action("DeletionAttempt", "Author", new { id = Model.Id })">&#10060;</a></th>
+            <th>
+                <a href="@Url.Action("Update", "Author", new { id = Model.Id })">&#9999;</a>
+                <a href="@Url.Action("DeletionAttempt", "Author", new { id = Model.Id })">&#10060;</a>
+            </th>
         </tr>
     </table>
 
@@ -21,7 +23,7 @@
     @if (Model.Books.Any())
     {
         int i = 1;
-        <div class="info-header">Книги</div>
+        <div class="info-header">Книги (@Model.Books.Count шт.)</div>
         @foreach (var item in @Model.Books)
         {
             <div>@i. @Html.ActionLink($"{item.Name}", "Info", "Book", new { id = @item.Id })</div>

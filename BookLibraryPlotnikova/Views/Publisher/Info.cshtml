@@ -1,27 +1,30 @@
 ﻿@model Domain.Entities.Publisher
-@{
-    ViewData["Title"] = "Publisher Info";
-}
-
+@{ ViewData["Title"] = "Publisher Info"; }
 <link rel="stylesheet" href="~/css/info.css" />
-
+<link rel="stylesheet" href="~/css/tables.css" />
 
 <div class="container">
     <table>
         <tr>
+            <th colspan="2">@Html.ActionLink("Назад ко всем издателям", "Index", "Author")</th>
+        </tr>
+        <tr>
             <th><h3>@Model.Name</h3></th>
-            <th><a href="@Url.Action("Change", "Publisher", new { id = Model.Id })">&#9999;</a></th>
+            <th>
+                <a href="@Url.Action("Update", "Publisher", new { id = Model.Id })">&#9999;</a>
+                <a href="@Url.Action("DeletionAttempt", "Publisher", new { id = Model.Id })">&#10060;</a>
+            </th>
         </tr>
     </table>
 
     <br />
     <div class="info-block"><a class="info-header">Страна</a> @Model.Country.Name</div>
 
-    @if (Model.Books.Count() != 0)
+    @if (Model.Books.Any())
     {
         int i = 1;
         <div class="info-block">
-            <div class="info-header">Книги</div>
+            <div class="info-header">Книги (@Model.Books.Count шт.)</div>
             @foreach (var item in Model.Books)
             {
                 <div>@i. @Html.ActionLink($"{item.Name}", "Info", "Book", new { id = @item.Id })</div>i++;

@@ -1,29 +1,31 @@
-﻿@model LibraryPlotnikova.Models.CreatePublisherModel
-@{ ViewData["Title"] = "Publisher - Create"; }
+﻿@model LibraryPlotnikova.Models.PublisherModels.UpdatePublisherModel
+@{ ViewData["Title"] = "Create Publisher"; }
 <link rel="stylesheet" href="~/css/create.css" />
 <link rel="stylesheet" href="~/css/tables.css" />
 
 <div class="container">
     <form asp-controller="Publisher">
+        @Html.HiddenFor(e => e.Id)
+
         <div class="input-block">
-            <label>Название</label>
+            <label asp-for="@Model.Name">Название</label>
             <input asp-for="@Model.Name" maxlength="50" size="55" placeholder="Введите название" autofocus autocomplete="off" />
             <span class="error-message" asp-validation-for="@Model.Name"></span>
         </div>
 
         <div class="input-block">
-            <label>Страна</label>
+            <label asp-for="@Model.CountryId">Страна</label>
             @Html.DropDownListFor(e => e.CountryId, Model.AvailableCountries)
         </div>
 
         <table>
             <tr>
                 <td>
-                    <input type="submit" asp-action="CreateFromModel" formmethod="post"
+                    <input type="submit" asp-action="UpdateFromModel" formmethod="post"
                            class="btn btn-outline-success" value="Сохранить" />
                 </td>
                 <td>
-                    <input type="submit" asp-action="Index" formmethod="get" formnovalidate
+                    <input type="submit" asp-action="Info" formmethod="get" formnovalidate
                            class="btn btn-outline-dark" value="Отмена" />
                 </td>
             </tr>

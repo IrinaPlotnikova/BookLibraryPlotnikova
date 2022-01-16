@@ -19,7 +19,6 @@ namespace BLL.Services
         {
             this.repository = repository;
         }
-
         public Task AddAuthor(Author author)
         {
             return repository.CreateAsync(author);
@@ -39,6 +38,7 @@ namespace BLL.Services
         {
             return repository.GetByIdAsync(authorId);
         }
+
         public async Task<ICollection<Book>> GetBooksByAuthorId(int authorId)
         {
             return (await repository.GetByIdAsync(authorId)).Books;
@@ -55,6 +55,7 @@ namespace BLL.Services
             Expression<Func<Author, bool>> expression = e => isEmpty || filter.CountriesId.Contains(e.CountryId);
             return repository.GetByFilterAsync(expression); 
         }
+
         public Task<ICollection<Author>> GetAuthorsById(AuthorFilter filter)
         {
             Expression<Func<Author, bool>> expression = e => filter.Ids.Contains(e.Id);

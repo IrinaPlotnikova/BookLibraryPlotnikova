@@ -10,7 +10,6 @@ namespace LibraryPlotnikova.Models.AuthorModels
         public int Id { get; set;}
 
         [Required (ErrorMessage = "Не указано полное имя")]
-        [Remote(action: "VerifyFullName", controller: "Author", AdditionalFields = nameof(Id), ErrorMessage ="Автор уже зарегистрирован")]
         public string FullName { get; set; } = "";
 
         [Required (ErrorMessage = "Не указано краткое имя")]

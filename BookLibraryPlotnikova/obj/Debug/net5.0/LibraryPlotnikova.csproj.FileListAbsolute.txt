@@ -404,3 +404,5 @@ D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\obj\Debug\net5.0\Razor\Views
 D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\obj\Debug\net5.0\Razor\Views\Home\Statistics.cshtml.g.cs
 D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\obj\Debug\net5.0\Razor\Views\Author\Update.cshtml.g.cs
 D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\obj\Debug\net5.0\Razor\Views\Author\ConfirmDeletion.cshtml.g.cs
+D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\obj\Debug\net5.0\Razor\Views\Publisher\ConfirmDeletion.cshtml.g.cs
+D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\obj\Debug\net5.0\Razor\Views\Publisher\Update.cshtml.g.cs
