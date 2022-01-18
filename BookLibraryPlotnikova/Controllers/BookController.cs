@@ -35,10 +35,7 @@ namespace LibraryPlotnikova.Controllers
         [HttpGet]
         public async Task<IActionResult> Index([FromQuery] BookFilter bookFilter)
         {
-            if (bookFilter == null)
-            {
-                bookFilter = new BookFilter();
-            }
+            bookFilter ??= new BookFilter();
 
             AllBooksModel model = new AllBooksModel()
             {
@@ -62,9 +59,9 @@ namespace LibraryPlotnikova.Controllers
                         Selected = bookFilter.PublishersId.Contains(e.Id)
                     }),
             };
+
             return View("Index", model);
         }
-
 
         [HttpGet]
         public async Task<IActionResult> Create()
@@ -75,29 +72,30 @@ namespace LibraryPlotnikova.Controllers
                 AvailableGenres = (await genreService.GetAllGenres()).Select(e => new SelectListItem() { Value = e.Id.ToString(), Text = e.Name }),
                 AvailablePublishers = (await publisherService.GetAllPublishers()).Select(e => new SelectListItem() { Value = e.Id.ToString(), Text = e.Name }),
                 AuthorFilter = new AuthorFilter()
-            };
-            return View("Create", model);
+            }; 
+
+            return View(nameof(Create), model);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateFromModel([FromForm] Book book, [FromForm] AuthorFilter authorFilter, [FromForm] int numberOfCopies)
         {
-            if (book == null || !await VerifyBook(book))
+            if (book == null || !await VerifyBook(book)) // TODO проверить на налл в VerifyBook
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index"); //TODO поменять все на nameof
             }
-            ICollection<Author> authors = await authorService.GetAuthorsById(authorFilter);
-            book.Authors = authors;
+
+            book.Authors = await authorService.GetAuthorsById(authorFilter);
             await bookService.CreateBook(book);
 
-            DateTime date = DateTime.Today;
-            ICollection<BookCopy> copies = CreateBookCopies(book.Id, numberOfCopies, date);
+  
+            ICollection<BookCopy> copies = CreateBookCopies(book.Id, numberOfCopies, DateTime.Today);
             await bookCopyService.CreateBookCopies(copies);
 
             ICollection<MoneyTransaction> transactions = CreateMoneyTransactionsForBuyingCopies(copies, book.Price);
             await moneyTransactionService.CreateMoneyTransactions(transactions);
 
-            return RedirectToAction("Info", new { id = book.Id});
+            return RedirectToAction(nameof(Info), new { id = book.Id});
         }
 
          [HttpGet]
@@ -220,7 +218,7 @@ namespace LibraryPlotnikova.Controllers
                 BookCopy copy = new BookCopy()
                 {
                     BookId = bookId,
-                    BookStatusId = 1,
+                    BookStatusId = 1, // TODO на бул
                     DateAdded = dateAdded,
                 };
                 copies.Add(copy);
@@ -265,6 +263,9 @@ namespace LibraryPlotnikova.Controllers
 
         private async Task<bool> VerifyBook(Book book)
         {
+            if (book == null) 
+                return false;
+
             IEnumerable<int> booksId = (await bookService.GetBooksByName(book.Name)).Select(e => e.Id);
             return !string.IsNullOrWhiteSpace(book.Name) && book.Name.Length <= 100 && (!booksId.Any() || booksId.Contains(book.Id)) &&
                 1 <= book.NumberOfPages && book.NumberOfPages <= int.MaxValue &&

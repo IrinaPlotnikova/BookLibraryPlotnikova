@@ -14,7 +14,6 @@ namespace BookLibraryPlotnikova.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IBookService bookService;
         private readonly IReaderService readerService;
         private readonly IPublisherService publisherService;
@@ -23,11 +22,10 @@ namespace BookLibraryPlotnikova.Controllers
         private readonly IBookCopyService bookCopyService;
         private readonly IMoneyTransactionService moneyTransactionService;
 
-        public HomeController(ILogger<HomeController> logger, IBookService bookService, IReaderService readerService, 
+        public HomeController(IBookService bookService, IReaderService readerService, 
             IPublisherService publisherService, IAuthorService authorService, IBookCheckoutService bookCheckoutService,
             IBookCopyService bookCopyService, IMoneyTransactionService moneyTransactionService)
         {
-            _logger = logger;
             this.bookService = bookService;
             this.readerService = readerService;
             this.publisherService = publisherService;

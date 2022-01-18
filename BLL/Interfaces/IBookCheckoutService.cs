@@ -2,6 +2,7 @@
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,10 +21,8 @@ namespace BLL.Interfaces
 
         public Task<ICollection<BookCheckout>> GetBookCheckoutsByReaderId(int readerId);
 
-        public Task<ICollection<BookCheckout>> GetBookCheckoutsToReadersByDates(DateFilter filter);
-
-        public Task<ICollection<BookCheckout>> GetBookCheckoutsFromReadersByDates(DateFilter filter);
-
         public Task DeleteAll();
+
+        public Task<MemoryStream> SaveStatisticsAsXlsxFileToMemoryStream(DateFilter filter);
     }
 }

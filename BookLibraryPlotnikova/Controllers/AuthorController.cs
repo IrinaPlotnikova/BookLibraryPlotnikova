@@ -14,13 +14,13 @@ namespace LibraryPlotnikova.Controllers
 {
     public class AuthorController : Controller
     {
-        private readonly ICountryService countryService;
-        private readonly IAuthorService authorService;
+        private readonly ICountryService _countryService;
+        private readonly IAuthorService _authorService;
 
         public AuthorController(ICountryService countryService, IAuthorService authorService)
         {
-            this.countryService = countryService;
-            this.authorService = authorService;
+            _countryService = countryService;
+            _authorService = authorService;
         }
 
         [HttpGet]
@@ -33,8 +33,8 @@ namespace LibraryPlotnikova.Controllers
 
             AllAuthorsModel model = new AllAuthorsModel()
             {
-                Authors = await authorService.GetAuthorsByCountries(authorFilter),
-                AvailableCountries = (await countryService.GetAllCountries()).Select(e => new SelectListItem() {
+                Authors = await _authorService.GetAuthorsByCountries(authorFilter),
+                AvailableCountries = (await _countryService.GetAllCountries()).Select(e => new SelectListItem() {
                 Value = e.Id.ToString(),
                 Text = e.Name,
                 Selected = authorFilter.CountriesId.Contains(e.Id)
@@ -48,7 +48,7 @@ namespace LibraryPlotnikova.Controllers
         {
             CreateAuthorModel model =  new CreateAuthorModel()
             {
-                AvailableCountries = (await countryService.GetAllCountries()).Select(e => new SelectListItem() { Value = e.Id.ToString(), Text = e.Name })
+                AvailableCountries = (await _countryService.GetAllCountries()).Select(e => new SelectListItem() { Value = e.Id.ToString(), Text = e.Name })
             };
             return View("Create", model);
         }
@@ -61,14 +61,14 @@ namespace LibraryPlotnikova.Controllers
                 return RedirectToAction("Index");
             }
  
-            await authorService.CreateAuthor(author);
+            await _authorService.CreateAuthor(author);
             return RedirectToAction("Info", new { id = author.Id});
         }
 
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
-            Author author = await authorService.GetAuthorById(id);
+            Author author = await _authorService.GetAuthorById(id);
             if (author == null)
             {
                  return RedirectToAction("Index");
@@ -80,7 +80,7 @@ namespace LibraryPlotnikova.Controllers
                 FullName = author.FullName,
                 ShortName = author.ShortName,
                 CountryId = author.CountryId,
-                AvailableCountries = (await countryService.GetAllCountries()).Select(e => new SelectListItem() { Value = e.Id.ToString(), Text = e.Name })
+                AvailableCountries = (await _countryService.GetAllCountries()).Select(e => new SelectListItem() { Value = e.Id.ToString(), Text = e.Name })
             };
             return View("Update", model);
         }
@@ -93,7 +93,7 @@ namespace LibraryPlotnikova.Controllers
                 return RedirectToAction("Index");
             }
 
-            Author author = await authorService.GetAuthorById(authorFromModel.Id);
+            Author author = await _authorService.GetAuthorById(authorFromModel.Id);
             if (author == null)
             {
                 return RedirectToAction("Index");
@@ -102,14 +102,14 @@ namespace LibraryPlotnikova.Controllers
             author.FullName = authorFromModel.FullName;
             author.ShortName = authorFromModel.ShortName;
             author.CountryId = authorFromModel.CountryId;
-            await authorService.UpdateAuthor(author);
+            await _authorService.UpdateAuthor(author);
             return RedirectToAction("Info", new { id = author.Id});
         }
 
         [HttpGet]
         public async Task<IActionResult> DeletionAttempt(int id)
         {
-            Author author = await authorService.GetAuthorById(id);
+            Author author = await _authorService.GetAuthorById(id);
             if (author == null)
             {
                 return RedirectToAction("Index");
@@ -120,9 +120,9 @@ namespace LibraryPlotnikova.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            if (await authorService.GetAuthorById(id) != null)
+            if (await _authorService.GetAuthorById(id) != null)
             {
-                await authorService.DeleteAuthor(id);
+                await _authorService.DeleteAuthor(id);
             }
             return RedirectToAction("Index");
         }
@@ -131,7 +131,7 @@ namespace LibraryPlotnikova.Controllers
         [HttpGet]
         public async Task<IActionResult> Info(int id)
         {
-            Author author = await authorService.GetAuthorById(id);
+            Author author = await _authorService.GetAuthorById(id);
             if (author == null)
             {
                 return RedirectToAction("Index");
@@ -141,11 +141,11 @@ namespace LibraryPlotnikova.Controllers
 
         private async Task<bool> VerifyAuthor(Author author)
         {
-            IEnumerable<int> authorsId = (await authorService.GetAuthorsByFullName(author.FullName)).Select(e => e.Id);
+            IEnumerable<int> authorsId = (await _authorService.GetAuthorsByFullName(author.FullName)).Select(e => e.Id);
             return !string.IsNullOrWhiteSpace(author.FullName) && author.FullName.Count() <= 100 &&
                 !string.IsNullOrWhiteSpace(author.ShortName) && author.ShortName.Count() <= 30 &&
                 (!authorsId.Any() || authorsId.Contains(author.Id)) &&
-                (author.CountryId == null || await countryService.GetCountryById(author.CountryId.Value) != null);
+                (author.CountryId == null || await _countryService.GetCountryById(author.CountryId.Value) != null);
         }
     }
 }

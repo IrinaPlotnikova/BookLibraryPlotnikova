@@ -61,7 +61,8 @@ namespace LibraryPlotnikova.Controllers
             Reader reader = await readerService.GetReaderById(id);
             if (reader == null)
             {
-                 return RedirectToAction("Index");
+                return NotFound();
+                // return RedirectToAction("Index");
             }
 
             UpdateReaderModel model =  new UpdateReaderModel()
