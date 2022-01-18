@@ -1,0 +1,27 @@
+﻿@model Domain.Entities.Reader
+@{ ViewData["Title"] = "Reader - Confirm deletion"; }
+<link rel="stylesheet" href="~/css/info.css" />
+<link rel="stylesheet" href="~/css/tables.css" />
+
+<div class="container">
+    <div class="info-block"><a class="info-header">Название</a> @Model.Name</div>
+    <div class="info-block"><a class="info-header">Email</a> @Model.Email</div>
+    <div class="info-block"><a class="info-header">Паспорт</a> @Model.Passport</div>
+
+    <table>
+        <tr>
+            <td>
+                <form method="get" asp-controller="Reader" asp-action="Delete" asp-route-id="@Model.Id">
+                    <button type="submit" class="btn btn-outline-danger">Удалить</button>
+                </form>
+            </td>
+            <td>
+                <form method="get" asp-controller="Reader" asp-action="Index">
+                    <button type="submit" class="btn btn-outline-dark">Отмена</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+
+

@@ -1,10 +1,11 @@
-﻿@model LibraryPlotnikova.Models.ReaderModels.CreateReaderModel
-@{ ViewData["Title"] = "Reader - Create"; }
+﻿@model LibraryPlotnikova.Models.ReaderModels.UpdateReaderModel
+@{ ViewData["Title"] = "Reader - Update"; }
 <link rel="stylesheet" href="~/css/create.css" />
 <link rel="stylesheet" href="~/css/tables.css" />
 
 <div class="container">
-    <form asp-controller="Reader" asp-action="CreateFromModel">
+    <form asp-controller="Reader" asp-action="UpdateFromModel">
+        @Html.HiddenFor(e => e.Id)
 
         <div class="input-block">
             <label>Имя</label>
@@ -27,11 +28,11 @@
         <table>
             <tr>
                 <td>
-                    <input type="submit" asp-action="CreateFromModel" formmethod="post"
+                    <input type="submit" asp-action="UpdateFromModel" formmethod="post"
                            class="btn btn-outline-success" value="Сохранить" />
                 </td>
                 <td>
-                    <input type="submit" asp-action="Index" formmethod="get" formnovalidate
+                    <input type="submit" asp-action="Info" formmethod="get" formnovalidate
                            class="btn btn-outline-dark" value="Отмена" />
                 </td>
             </tr>

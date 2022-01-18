@@ -1,30 +1,40 @@
 ﻿@model LibraryPlotnikova.Models.ReaderModels.InfoReaderModel
 @{ 
-    ViewData["Title"] = "Reader Info";
+    ViewData["Title"] = "Reader - Info";
 }
 <link rel="stylesheet" href="~/css/info.css" />
+<link rel="stylesheet" href="~/css/tables.css" />
 
 <div class="container">
     <table>
-        <tr>
-            <th><h3>@Model.Reader.Name</h3></th>
-            <th><a href="@Url.Action("Change", "Reader", new { id = Model.Reader.Id })">&#9999;</a></th>
-        </tr>
-    </table>
+         <tr>
+             <th colspan="2">@Html.ActionLink("Назад ко всем читателям", "Index", "Reader")</th>
+         </tr>
+         <tr>
+             <th><h3>@Model.Reader.Name</h3></th>
+             <th>
+                 <a href="@Url.Action("Update", "Reader", new { id = Model.Reader.Id })">&#9999;</a>
+                 @if (!Model.BookCheckoutsCurrent.Any())
+                 {
+                     <a href="@Url.Action("DeletionAttempt", "Reader", new { id = Model.Reader.Id })">&#10060;</a>
+                 }
+             </th>
+         </tr>
+     </table>
 
     <br />
     <div class="info-block"><a class="info-header">Email</a> @Model.Reader.Email</div>
     <div class="info-block"><a class="info-header">Паспорт</a> @Model.Reader.Passport</div>
     <div class="info-block">
         @Html.ActionLink("Выдать книги", "GiveBooks", new { readerId = Model.Reader.Id })
-        @if (Model.BookCheckoutsCurrent.Count() != 0)
+        @if (Model.BookCheckoutsCurrent.Any())
         {
             <a> / @Html.ActionLink("Принять книги", "TakeBooks", new { readerId = Model.Reader.Id })</a>
         }
     </div>
     
 
-    @if(Model.BookCheckoutsCurrent.Count() != 0)
+    @if(Model.BookCheckoutsCurrent.Any())
     {
         DateTime currentDate = DateTime.Today;
 
@@ -54,7 +64,7 @@
         </table>
     }
     
-    @if (Model.BookCheckoutsHistory.Count() != 0) 
+    @if (Model.BookCheckoutsHistory.Any()) 
     { 
         <br />
         <div class="info-header">История</div>

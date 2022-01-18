@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -36,7 +37,6 @@ namespace LibraryPlotnikova.Controllers
             return View("Index", await readerService.GetAllReaders());
         }
 
-
         [HttpGet]
         public IActionResult Create()
         {
@@ -44,72 +44,108 @@ namespace LibraryPlotnikova.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateFromModel(CreateReaderModel model)
+        public async Task<IActionResult> CreateFromModel([FromForm] Reader reader)
         {
-            Reader reader = new Reader()
+            if (reader == null || !await VerifyReader(reader))
             {
-                Id = model.Id,
-                Name = model.Name,
-                Email = model.Email,
-                Passport = model.Passport,
-            };
-
-            if (reader.Id == 0)
-            {
-                await readerService.CreateReader(reader);
-            }
-            else
-            {
-                await readerService.UpdateReader(reader);
+                return RedirectToAction("Index");
             }
 
+            await readerService.CreateReader(reader);
             return RedirectToAction("Info", new { id = reader.Id });
         }
 
         [HttpGet]
-        public async Task<IActionResult> Change(int id)
+        public async Task<IActionResult> Update(int id)
         {
             Reader reader = await readerService.GetReaderById(id);
-            CreateReaderModel model = new CreateReaderModel()
+            if (reader == null)
             {
-                Id = reader.Id,
+                 return RedirectToAction("Index");
+            }
+
+            UpdateReaderModel model =  new UpdateReaderModel()
+            {
+                Id = id,
                 Name = reader.Name,
                 Email = reader.Email,
-                Passport = reader.Passport,
+                Passport = reader.Passport
             };
-            return View("Create", model);
+            return View("Update", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateFromModel([FromForm] Reader readerFromModel)
+        {
+            if (readerFromModel == null || !await VerifyReader(readerFromModel))
+            {
+                return RedirectToAction("Index");
+            }
+
+            Reader reader = await readerService.GetReaderById(readerFromModel.Id);
+            if (reader == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            reader.Name = readerFromModel.Name;
+            reader.Email = readerFromModel.Email;
+            reader.Passport = readerFromModel.Passport;
+            await readerService.UpdateReader(reader);
+            return RedirectToAction("Info", new { id = reader.Id});
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeletionAttempt(int id)
+        {
+            Reader reader = await readerService.GetReaderById(id);
+            if (reader == null)
+            {
+                return RedirectToAction("Index");
+            }
+            return View("ConfirmDeletion", reader);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (await readerService.GetReaderById(id) != null)
+            {
+                await readerService.DeleteReader(id);
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
         public async Task<IActionResult> Info(int id)
         {
             Reader reader = await readerService.GetReaderById(id);
+            if (reader == null)
+            {
+                return RedirectToAction("Index");
+            }
+
             InfoReaderModel model = new InfoReaderModel()
             {
                 Reader = reader,
                 BookCheckoutsCurrent = reader.BookCheckouts.Where(e => e.DateBookReturned == null),
-                BookCheckoutsHistory = reader.BookCheckouts.Where(e => e.DateBookReturned != null),
+                BookCheckoutsHistory = reader.BookCheckouts.Where(e => e.DateBookReturned != null)
             };
             return View("Info", model);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Delete(int id)
-        {
-            try
-            {
-                await readerService.DeleteReader(id);
-            }
-            catch (Exception) { } // повторное удаление
-            return RedirectToAction("Index");
-        }
-
-        [HttpGet]
         public async Task<IActionResult> GiveBooks(int readerId)
         {
+            Reader reader = await readerService.GetReaderById(readerId);
+            if (reader == null)
+            {
+                return RedirectToAction("Index");
+            }
+
             GiveBooksModel model = new GiveBooksModel()
             {
-                Reader = await readerService.GetReaderById(readerId),
+                Reader = reader,
                 AvailableBooks = (await bookService.GetAvailableBooks()).Select(e => new SelectListItem() { Value = e.Id.ToString(), Text = e.Name }),
             };
             return View("GiveBooks", model);
@@ -120,27 +156,34 @@ namespace LibraryPlotnikova.Controllers
         {
             DateTime dateStart = DateTime.Today;
             DateTime dateFinish = dateStart.AddMonths(3);
+            if (await readerService.GetReaderById(model.Reader.Id) == null)
+            {
+                return RedirectToAction("Index");
+            }
 
             foreach(int bookId in model.SelectedBooksId)
             {
                 Book book = await bookService.GetBookById(bookId);
-                ICollection<BookCopy> availableBookCopies = await bookCopyService.GetAvailableCopiesByBookId(bookId);
-                if (availableBookCopies.Count > 0)
+                if (book != null)
                 {
-                    BookCopy bookCopy = availableBookCopies.ElementAt(0);
-                    BookCheckout bookCheckout = new BookCheckout()
+                    ICollection<BookCopy> availableBookCopies = await bookCopyService.GetAvailableCopiesByBookId(bookId);
+                    if (availableBookCopies.Any())
                     {
-                        BookCopyId = bookCopy.Id,
-                        ReaderId = model.Reader.Id,
-                        DateStart = dateStart,
-                        DateFinish = dateFinish,
-                        DateBookReturned = null,
-                        OverdueFine = Math.Max(5, (int)(book.Price * 0.01))
-                    };
-                    bookCopy.BookStatusId = 2;
-                    bookCopy.ReaderId = model.Reader.Id;
-                    await bookCopyService.UpdateBookCopy(bookCopy);
-                    await bookCheckoutService.AddBookCheckout(bookCheckout);
+                        BookCopy bookCopy = availableBookCopies.ElementAt(0);
+                        BookCheckout bookCheckout = new BookCheckout()
+                        {
+                            BookCopyId = bookCopy.Id,
+                            ReaderId = model.Reader.Id,
+                            DateStart = dateStart,
+                            DateFinish = dateFinish,
+                            DateBookReturned = null,
+                            OverdueFine = Math.Max(5, (int)(book.Price * 0.01))
+                        };
+                        bookCopy.BookStatusId = 2;
+                        bookCopy.ReaderId = model.Reader.Id;
+                        await bookCopyService.UpdateBookCopy(bookCopy);
+                        await bookCheckoutService.AddBookCheckout(bookCheckout);
+                    }
                 }
             }
             return RedirectToAction("Info", new { id = model.Reader.Id});
@@ -151,6 +194,11 @@ namespace LibraryPlotnikova.Controllers
         public async Task<IActionResult> TakeBooks(int readerId)
         {
             Reader reader = await readerService.GetReaderById(readerId);
+            if (reader == null)
+            {
+                return RedirectToAction("Index");
+            }
+
             TakeBooksModel model = new TakeBooksModel()
             {
                 Reader = reader,
@@ -167,40 +215,51 @@ namespace LibraryPlotnikova.Controllers
         public async Task<IActionResult> TakeBooks(TakeBooksModel model)
         {
             DateTime today = DateTime.Today;
+            Reader reader = await readerService.GetReaderById(model.Reader.Id);
+            if (reader == null)
+            {
+                return RedirectToAction("Index");
+            }
+
             foreach(int bookCheckoutId in model.SelectedBookCheckoutsId)
             {
                 BookCheckout bookCheckout = await bookCheckoutService.GetBookCheckoutById(bookCheckoutId);
-                bookCheckout.DateBookReturned = today;
-                await bookCheckoutService.UpdateBookCheckout(bookCheckout);
-
-                BookCopy bookCopy = bookCheckout.BookCopy;
-                bookCopy.ReaderId = null;
-                bookCopy.BookStatusId = 1;
-                await bookCopyService.UpdateBookCopy(bookCopy);
-                
-                if (today > bookCheckout.DateFinish)
+                if (bookCheckout != null)
                 {
-                    int overdueFine = (today - bookCheckout.DateFinish).Days * bookCheckout.OverdueFine;
-                    MoneyTransaction moneyTransaction = new MoneyTransaction()
+                    bookCheckout.DateBookReturned = today;
+                    await bookCheckoutService.UpdateBookCheckout(bookCheckout);
+
+                    BookCopy bookCopy = bookCheckout.BookCopy;
+                    bookCopy.ReaderId = null;
+                    bookCopy.BookStatusId = 1;
+                    await bookCopyService.UpdateBookCopy(bookCopy);
+                
+                    if (today > bookCheckout.DateFinish)
                     {
-                        MoneyTransactionTypeId = 2,
-                        ReaderId = model.Reader.Id,
-                        Date = today,
-                        BookCopyId = bookCopy.Id,
-                        AmountOfMoney = overdueFine,
-                    };
-                    await moneyTransactionService.AddMoneyTransaction(moneyTransaction);
+                        int overdueFine = (today - bookCheckout.DateFinish).Days * bookCheckout.OverdueFine;
+                        MoneyTransaction moneyTransaction = new MoneyTransaction()
+                        {
+                            MoneyTransactionTypeId = 2,
+                            ReaderId = model.Reader.Id,
+                            Date = today,
+                            BookCopyId = bookCopy.Id,
+                            AmountOfMoney = overdueFine,
+                        };
+                        await moneyTransactionService.AddMoneyTransaction(moneyTransaction);
+                    }
                 }
             }
             return RedirectToAction("Info", new { id = model.Reader.Id});
         }
 
-
-        [AcceptVerbs("Get", "Post")]
-        public async Task<IActionResult> VerifyPassport(string passport, int id)
+        private async Task<bool> VerifyReader(Reader reader)
         {
-            IEnumerable<int> readersId = (await readerService.GetReadersByPassport(passport)).Select(r => r.Id);
-            return Json(readersId.Count() == 0 || readersId.Contains(id));
+            EmailAddressAttribute emailValidation = new EmailAddressAttribute();
+            IEnumerable<int> readersId = (await readerService.GetReadersByPassport(reader.Passport)).Select(r => r.Id);
+            return !string.IsNullOrWhiteSpace(reader.Name) && reader.Name.Length <= 150 &&
+                !string.IsNullOrWhiteSpace(reader.Passport) && reader.Passport.Length <= 20 &&
+                (!readersId.Any() || readersId.Contains(reader.Id)) &&
+                !string.IsNullOrWhiteSpace(reader.Email) && reader.Email.Length <= 40 && emailValidation.IsValid(reader.Email);
         }
     }
 }

@@ -1,8 +1,7 @@
 ﻿@model ICollection<Domain.Entities.Reader>
 @{ ViewData["Title"] = "Readers"; }
-
 <link rel="stylesheet" href="~/css/tables.css" />
-
+<link rel="stylesheet" href="~/css/filters.css" />
 
 <div class="container">
     <table>
@@ -47,10 +46,10 @@
                     </td>
                     <td>
                         <a href="@Url.Action("Info", "Reader", new { id = @item.Id })">&#128269;</a>
-                        <a href="@Url.Action("Change", "Reader", new { id = @item.Id })">&#9999;</a>
+                        <a href="@Url.Action("Update", "Reader", new { id = @item.Id })">&#9999;</a>
                         @if (numberOfBooks == 0)
                         {
-                            <a href="@Url.Action("Delete", "Reader", new { id = @item.Id })">&#10060;</a>
+                            <a href="@Url.Action("ConfirmDeletion", "Reader", new { id = @item.Id })">&#10060;</a>
                         }
                     </td>
                 </tr>
