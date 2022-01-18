@@ -1,0 +1,38 @@
+﻿@model Domain.Entities.Book
+@{ ViewData["Title"] = "Book - Confirm deletion"; }
+<link rel="stylesheet" href="~/css/info.css" />
+<link rel="stylesheet" href="~/css/tables.css" />
+
+<div class="container">
+    <div class="info-block"><a class="info-header">Название</a> @Model.Name</div>
+    <div class="info-block"><a class="info-header">Кол-во страниц</a> @Model.NumberOfPages</div>
+    <div class="info-block"><a class="info-header">Год издания</a> @Model.PublishmentYear</div>
+    <div class="info-block"><a class="info-header">Стоимость</a> @Model.Price</div>
+    @if (Model.Genre != null)
+    {
+        <div class="info-block"><a class="info-header">Жанр</a> @Model.Genre.Name</div>
+    }
+    @if (Model.Publisher != null)
+    {
+        <div class="info-block"><a class="info-header">Издательство</a> @Model.Publisher.Name</div>
+    }
+    <div class="info-block"><a class="info-header">Кол-во копий</a> @Model.BookCopies.Count()</div>
+    <div class="info-block"><a class="info-header">Кол-во авторов</a> @Model.Authors.Count()</div>
+
+    <table>
+        <tr>
+            <td>
+                <form method="get" asp-controller="Book" asp-action="Delete" asp-route-id="@Model.Id">
+                    <button type="submit" class="btn btn-outline-danger">Удалить</button>
+                </form>
+            </td>
+            <td>
+                <form method="get" asp-controller="Book" asp-action="Index">
+                    <button type="submit" class="btn btn-outline-dark">Отмена</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+
+

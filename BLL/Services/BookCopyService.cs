@@ -35,5 +35,10 @@ namespace BLL.Services
         {
             return repository.UpdateItemAsync(bookCopy);
         }
+
+        public Task AddBookCopies(IEnumerable<BookCopy> bookCopies)
+        {
+            return repository.CreateRangeAsync(bookCopies);
+        }
     }
 }

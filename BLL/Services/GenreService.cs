@@ -22,5 +22,10 @@ namespace BLL.Services
         {
             return repository.GetAllAsync();
         }
+
+        public Task<Genre> GetGenderById(int genderId)
+        {
+            return repository.GetByIdAsync(genderId);
+        }
     }
 }

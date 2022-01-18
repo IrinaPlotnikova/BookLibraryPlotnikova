@@ -1,20 +1,16 @@
-﻿@model LibraryPlotnikova.Models.CreateBookModel
-@{ ViewData["Title"] = "Book - Create"; }
-<link rel="stylesheet" href="~/css/create.css" />
+﻿@model LibraryPlotnikova.Models.BookModels.UpdateBookModel
+@{ ViewData["Title"] = "Book - Update"; }
+<link rel="stylesheet" href="~/css/info.css" />
 <link rel="stylesheet" href="~/css/tables.css" />
 
 <div class="container">
-    <form asp-controller="Book">
+    <form asp-controller="Book" asp-action="UpdateFromModel">
+        @Html.HiddenFor(e => e.Id)
+
         <div class="input-block">
             <label>Название</label>
             <input asp-for="@Model.Name" maxlength="50" size="55" placeholder="Введите название" autofocus autocomplete="off" />
             <span class="error-message" asp-validation-for="@Model.Name"></span>
-        </div>
-
-        <div class="input-block">
-            <label>Количество копий</label>
-            <input asp-for="@Model.NumberOfCopies" />
-            <span class="error-message" asp-validation-for="@Model.NumberOfCopies"></span>
         </div>
 
         <div class="input-block">
@@ -75,11 +71,11 @@
         <table>
             <tr>
                 <td>
-                    <input type="submit" asp-action="CreateFromModel" formmethod="post"
-                           class="btn btn-outline-success" value="Сохранить"/>
+                    <input type="submit" asp-action="UpdateFromModel" formmethod="post"
+                           class="btn btn-outline-success" value="Сохранить" />
                 </td>
                 <td>
-                    <input type="submit" asp-action="Index" formmethod="get" formnovalidate
+                    <input type="submit" asp-action="Info" formmethod="get" formnovalidate
                            class="btn btn-outline-dark" value="Отмена" />
                 </td>
             </tr>

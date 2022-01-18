@@ -10,7 +10,9 @@ namespace BLL.Interfaces
 {
     public interface IMoneyTransactionService
     {
-        public Task AddMoneyTransaction(MoneyTransaction bookCopy);
+        public Task AddMoneyTransaction(MoneyTransaction moneyTransaction);
+
+        public Task AddMoneyTransactions(IEnumerable<MoneyTransaction> moneyTransactions);
 
         public Task<ICollection<MoneyTransaction>> GetTransactionsByDates(DateFilter filter);
     }

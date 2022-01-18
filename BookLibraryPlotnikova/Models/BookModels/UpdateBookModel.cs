@@ -1,5 +1,4 @@
 ﻿using BLL.Filters;
-using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -8,16 +7,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LibraryPlotnikova.Models
+namespace LibraryPlotnikova.Models.BookModels
 {
-    public class CreateBookModel
+    public class UpdateBookModel
     {
+        public int Id { get; set; }
+
         [Required (ErrorMessage = "Не указано название")]
         public string Name { get; set; } = "";
-
-        [Required (ErrorMessage = "Не указано количество книг")]
-        [Range(1, int.MaxValue, ErrorMessage = "Недопустимое количество книг")]
-        public int NumberOfCopies { get; set; } = 10;
 
         [Required (ErrorMessage = "Не указано количество страниц")]
         [Range(1, int.MaxValue, ErrorMessage = "Недопустимое количество страниц")]

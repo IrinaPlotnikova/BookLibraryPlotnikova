@@ -19,5 +19,7 @@ namespace LibraryPlotnikova.Models.BookModels
         public IEnumerable<SelectListItem> AvailablePublishers { get; set; } = new List<SelectListItem>();
 
         public BookFilter BookFilter { get; set; } = new BookFilter();
+
+
     }
 }

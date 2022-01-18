@@ -13,6 +13,8 @@ namespace BLL.Interfaces
 
         public Task AddBookCopy(BookCopy bookCopy);
 
+        public Task AddBookCopies(IEnumerable<BookCopy> bookCopies);
+
         public Task UpdateBookCopy(BookCopy bookCopy);
     }
 }

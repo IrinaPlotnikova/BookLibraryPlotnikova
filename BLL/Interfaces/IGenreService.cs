@@ -10,5 +10,7 @@ namespace BLL.Interfaces
     public interface IGenreService
     {
         public Task<ICollection<Genre>> GetAllGenres();
+
+        public Task<Genre> GetGenderById(int genderId);
     }
 }

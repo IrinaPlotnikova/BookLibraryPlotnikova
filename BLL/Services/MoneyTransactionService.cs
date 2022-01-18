@@ -27,8 +27,13 @@ namespace BLL.Services
 
         public Task<ICollection<MoneyTransaction>> GetTransactionsByDates(DateFilter filter)
         {
-             Expression<Func<MoneyTransaction, bool>> expression = e => filter.FirstDate <= e.Date && e.Date <= filter.LastDate;
+            Expression<Func<MoneyTransaction, bool>> expression = e => filter.FirstDate <= e.Date && e.Date <= filter.LastDate;
             return repository.GetByFilterAsync(expression);
+        }
+
+        public Task AddMoneyTransactions(IEnumerable<MoneyTransaction> moneyTransactions)
+        {
+            return repository.CreateRangeAsync(moneyTransactions);
         }
     }
 }

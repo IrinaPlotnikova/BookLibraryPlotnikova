@@ -1,19 +1,47 @@
 ﻿@model LibraryPlotnikova.Models.BookModels.BookInfoModel
-@{ ViewData["Title"] = "Book Info"; }
+@{ ViewData["Title"] = "Book - Info"; }
 <link rel="stylesheet" href="~/css/info.css" />
+<link rel="stylesheet" href="~/css/tables.css" />
 
 <div class="container">
-    <table>
-        <tr>
-            <th><h3>@Model.Book.Name</h3></th>
-            <th><a href="@Url.Action("Change", "Book", new { id = @Model.Book.Id })">&#9999;</a></th>
-        </tr>
-    </table>
+     <table>
+         <tr>
+             <th colspan="2">@Html.ActionLink("Назад ко всем книгам", "Index", "Book")</th>
+         </tr>
+         <tr>
+             <th><h3>@Model.Book.Name</h3></th>
+             <th>
+                 <a href="@Url.Action("Update", "Book", new { id = Model.Book.Id })">&#9999;</a>
+                 @if (!Model.BookCopiesReader.Any())
+                 {
+                     <a href="@Url.Action("DeletionAttempt", "Book", new { id = Model.Book.Id })">&#10060;</a>
+                 }
+             </th>
+         </tr>
+     </table>
 
-     @if (Model.Book.Authors.Count() != 0)
+     <div class="info-block"><a class="info-header">Год издания</a> @Model.Book.PublishmentYear</div>
+     <div class="info-block"><a class="info-header">Кол-во страниц</a> @Model.Book.NumberOfPages</div>
+     <div class="info-block"><a class="info-header">Стоимость</a> @Model.Book.Price р.</div>
+     @{
+         int numberOfCopies = Model.BookCopiesLibrary.Count() + Model.BookCopiesReader.Count();
+         <div class="info-block"><a class="info-header">Кол-во копий</a> @numberOfCopies шт.</div>
+     }
+     <div class="info-block"><a class="info-header">&nbsp;&nbsp;- в библиотеке</a> @Model.BookCopiesLibrary.Count() шт.</div>
+     <div class="info-block"><a class="info-header">&nbsp;&nbsp;- у читателя</a> @Model.BookCopiesReader.Count() шт.</div>
+
+     @if(Model.Book.Genre != null) 
+     {
+         <div class="info-block"><a class="info-header">Жанр</a> @Model.Book.Genre.Name</div>
+     }
+     @if(Model.Book.Genre != null) 
+     {
+         <div class="info-block"><a class="info-header">Издатель</a> @Model.Book.Publisher.Name</div>
+     } 
+
+     @if (Model.Book.Authors.Any())
      {
          int i = 1;
-
          <br />
          <div class="info-block">
              <div class="info-header">Авторы</div>
@@ -25,8 +53,7 @@
          </div>
      }  
 
-
-     @if(Model.BookCopiesReader.Count() != 0) 
+     @if(Model.BookCopiesReader.Any()) 
      { 
          <br />
          <div class="info-block">
@@ -40,8 +67,7 @@
          </div>
      }
 
-
-     @if(Model.BookCopiesLibrary.Count() != 0) 
+     @if(Model.BookCopiesLibrary.Any()) 
      { 
          <br />
          <div class="info-block">
@@ -52,7 +78,6 @@
              }
          </div>
      }
-
 </div>
 
 
