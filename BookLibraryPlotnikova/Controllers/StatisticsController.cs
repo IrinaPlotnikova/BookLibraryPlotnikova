@@ -43,11 +43,11 @@ namespace LibraryPlotnikova.Controllers
                 .OrderBy(e => e.Date);
 
             StringBuilder builder = new StringBuilder();
-            builder.AppendLine("Сумма;Тип операции;Книга;Читатель");
+            builder.AppendLine("Дата;Сумма;Тип операции;Книга;Читатель");
 
             foreach(var item in transactions)
             {
-                builder.AppendLine($"{item.AmountOfMoney};{item.MoneyTransactionType.Name};{item.BookCopy.Book?.Name};{item.Reader?.Name}");
+                builder.AppendLine($"{item.Date.ToShortDateString()};{item.AmountOfMoney};{item.MoneyTransactionType.Name};{item.BookCopy.Book?.Name};{item.Reader?.Name}");
             }
 
             string title = $"transactions {filter.FirstDate.ToShortDateString()} — {filter.LastDate.ToShortDateString()} .txt";
@@ -67,11 +67,11 @@ namespace LibraryPlotnikova.Controllers
             checkouts = checkouts.OrderBy(e => e.Date).ToList();
 
             StringBuilder builder = new StringBuilder();
-            builder.AppendLine("Дата;Книга;Читатель;Тип операции");
+            builder.AppendLine("Дата;Тип операции;Книга;Читатель");
 
             foreach(var item in checkouts)
             {
-                builder.AppendLine($"{item.Date};{item.BookName};{item.ReaderName};{item.Type}");
+                builder.AppendLine($"{item.Date.ToShortDateString()};{item.Type};{item.BookName};{item.ReaderName}");
             }
 
             string title = $"checkouts {filter.FirstDate.ToShortDateString()} — {filter.LastDate.ToShortDateString()} .txt";
