@@ -20,7 +20,7 @@ namespace BLL.Services
             this.repository = repository;
         }
 
-        public Task AddBookCheckout(BookCheckout bookCheckout)
+        public Task CreateBookCheckout(BookCheckout bookCheckout)
         {
             return repository.CreateAsync(bookCheckout);
         }
@@ -52,6 +52,16 @@ namespace BLL.Services
             Expression<Func<BookCheckout, bool>> expression = e => e.DateBookReturned != null &&
                 filter.FirstDate <= e.DateBookReturned && e.DateBookReturned <= filter.LastDate;
             return repository.GetByFilterAsync(expression);
+        }
+
+        public Task DeleteAll()
+        {
+            return repository.Clear();
+        }
+
+        public Task CreateBookCheckouts(IEnumerable<BookCheckout> bookCheckouts)
+        {
+            return repository.CreateRangeAsync(bookCheckouts);
         }
     }
 }

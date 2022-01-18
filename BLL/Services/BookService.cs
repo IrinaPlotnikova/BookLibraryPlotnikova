@@ -20,7 +20,7 @@ namespace BLL.Services
             this.repository = repository;
         }
 
-        public Task AddBook(Book book)
+        public Task CreateBook(Book book)
         {
             return repository.CreateAsync(book);
         }
@@ -69,6 +69,16 @@ namespace BLL.Services
         {
             Expression<Func<Book, bool>> expression = e => e.Name == name;
             return repository.GetByFilterAsync(expression);
+        }
+
+        public Task CreateBooks(IEnumerable<Book> books)
+        {
+            return repository.CreateRangeAsync(books);
+        }
+
+        public Task DeleteAll()
+        {
+            return repository.Clear();
         }
     }
 }

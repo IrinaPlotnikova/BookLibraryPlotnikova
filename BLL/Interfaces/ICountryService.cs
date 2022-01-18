@@ -10,7 +10,7 @@ namespace BLL.Interfaces
 {
     public interface ICountryService
     {
-        public Task AddCountry(Country country);
+        public Task CreateCountry(Country country);
 
         public Task UpdateCountry(Country country);
 

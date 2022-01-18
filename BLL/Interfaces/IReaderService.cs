@@ -12,14 +12,18 @@ namespace BLL.Interfaces
     {
         public Task CreateReader(Reader publisher);
 
+        public Task CreateReaders(IEnumerable<Reader> readers);
+
         public Task UpdateReader(Reader reader);
 
-        public Task<Reader> DeleteReader(int authorId);
+        public Task<Reader> DeleteReader(int readerId);
 
         public Task<ICollection<Reader>> GetAllReaders();
 
         public Task<Reader> GetReaderById(int readerId);
 
         public Task<ICollection<Reader>> GetReadersByPassport(string passport);
+
+        public Task DeleteAll();
     }
 }

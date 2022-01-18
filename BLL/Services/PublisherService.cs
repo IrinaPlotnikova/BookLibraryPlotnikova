@@ -58,6 +58,16 @@ namespace BLL.Services
             Expression<Func<Publisher, bool>> expression = e => e.Name == name;
             return repository.GetByFilterAsync(expression);
         }
+
+        public Task CreatePublishers(IEnumerable<Publisher> publishers)
+        {
+            return repository.CreateRangeAsync(publishers);
+        }
+
+        public Task DeleteAll()
+        {
+            return repository.Clear();
+        }
     }
 }
  

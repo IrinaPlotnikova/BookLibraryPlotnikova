@@ -12,6 +12,8 @@ namespace BLL.Interfaces
     {
         public Task CreatePublisher(Publisher publisher);
 
+        public Task CreatePublishers(IEnumerable<Publisher> publishers);
+
         public Task UpdatePublisher(Publisher publisher);
 
         public Task<Publisher> DeletePublisher(int publisherId);
@@ -23,5 +25,7 @@ namespace BLL.Interfaces
         public Task<ICollection<Publisher>> GetPublisherByCountries(PublisherFilter filter);
 
         public Task<ICollection<Publisher>> GetPublishersByName(string name);
+
+        public Task DeleteAll();
     }
 }

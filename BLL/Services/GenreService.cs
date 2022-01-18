@@ -27,5 +27,10 @@ namespace BLL.Services
         {
             return repository.GetByIdAsync(genderId);
         }
+
+        public Task DeleteAll()
+        {
+            return repository.Clear();
+        }
     }
 }

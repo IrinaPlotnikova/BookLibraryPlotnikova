@@ -182,7 +182,7 @@ namespace LibraryPlotnikova.Controllers
                         bookCopy.BookStatusId = 2;
                         bookCopy.ReaderId = model.Reader.Id;
                         await bookCopyService.UpdateBookCopy(bookCopy);
-                        await bookCheckoutService.AddBookCheckout(bookCheckout);
+                        await bookCheckoutService.CreateBookCheckout(bookCheckout);
                     }
                 }
             }
@@ -245,7 +245,7 @@ namespace LibraryPlotnikova.Controllers
                             BookCopyId = bookCopy.Id,
                             AmountOfMoney = overdueFine,
                         };
-                        await moneyTransactionService.AddMoneyTransaction(moneyTransaction);
+                        await moneyTransactionService.CreateMoneyTransaction(moneyTransaction);
                     }
                 }
             }

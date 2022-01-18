@@ -11,10 +11,12 @@ namespace BLL.Interfaces
     {
         public Task<ICollection<BookCopy>> GetAvailableCopiesByBookId(int bookId);
 
-        public Task AddBookCopy(BookCopy bookCopy);
+        public Task CreateBookCopy(BookCopy bookCopy);
 
-        public Task AddBookCopies(IEnumerable<BookCopy> bookCopies);
+        public Task CreateBookCopies(IEnumerable<BookCopy> bookCopies);
 
         public Task UpdateBookCopy(BookCopy bookCopy);
+
+        public Task DeleteAll();
     }
 }

@@ -19,7 +19,7 @@ namespace BLL.Services
             this.repository = repository;
         }
 
-        public Task AddCountry(Country country)
+        public Task CreateCountry(Country country)
         {
             return repository.CreateAsync(country);
         }

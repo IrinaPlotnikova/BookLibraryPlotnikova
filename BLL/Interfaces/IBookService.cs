@@ -10,7 +10,9 @@ namespace BLL.Interfaces
 {
     public interface IBookService
     {
-        public Task AddBook(Book book);
+        public Task CreateBook(Book book);
+
+        public Task CreateBooks(IEnumerable<Book> books);
 
         public Task UpdateBook(Book book);
 
@@ -25,5 +27,7 @@ namespace BLL.Interfaces
         public Task<ICollection<Book>> GetBooksByGenresAuthorsAndPublishersId(BookFilter bookFilter);
 
         public Task<ICollection<Book>> GetBooksByName(string name);
+
+        public Task DeleteAll();
     }
 }

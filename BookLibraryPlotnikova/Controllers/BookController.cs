@@ -88,14 +88,14 @@ namespace LibraryPlotnikova.Controllers
             }
             ICollection<Author> authors = await authorService.GetAuthorsById(authorFilter);
             book.Authors = authors;
-            await bookService.AddBook(book);
+            await bookService.CreateBook(book);
 
             DateTime date = DateTime.Today;
             ICollection<BookCopy> copies = CreateBookCopies(book.Id, numberOfCopies, date);
-            await bookCopyService.AddBookCopies(copies);
+            await bookCopyService.CreateBookCopies(copies);
 
             ICollection<MoneyTransaction> transactions = CreateMoneyTransactionsForBuyingCopies(copies, book.Price);
-            await moneyTransactionService.AddMoneyTransactions(transactions);
+            await moneyTransactionService.CreateMoneyTransactions(transactions);
 
             return RedirectToAction("Info", new { id = book.Id});
         }
@@ -252,7 +252,7 @@ namespace LibraryPlotnikova.Controllers
         private async Task AddBookCopyAsync(Book book)
         {
             BookCopy bookCopy = new BookCopy() { BookId = book.Id, BookStatusId = 1, DateAdded = DateTime.Today };
-            await bookCopyService.AddBookCopy(bookCopy);
+            await bookCopyService.CreateBookCopy(bookCopy);
             MoneyTransaction transaction = new MoneyTransaction()
             {
                 BookCopyId = bookCopy.Id,
@@ -260,7 +260,7 @@ namespace LibraryPlotnikova.Controllers
                 AmountOfMoney = book.Price,
                 Date = bookCopy.DateAdded
             };
-            await moneyTransactionService.AddMoneyTransaction(transaction);
+            await moneyTransactionService.CreateMoneyTransaction(transaction);
         }
 
         private async Task<bool> VerifyBook(Book book)

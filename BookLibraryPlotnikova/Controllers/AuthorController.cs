@@ -61,7 +61,7 @@ namespace LibraryPlotnikova.Controllers
                 return RedirectToAction("Index");
             }
  
-            await authorService.AddAuthor(author);
+            await authorService.CreateAuthor(author);
             return RedirectToAction("Info", new { id = author.Id});
         }
 

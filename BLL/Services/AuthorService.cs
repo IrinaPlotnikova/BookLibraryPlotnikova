@@ -19,7 +19,7 @@ namespace BLL.Services
         {
             this.repository = repository;
         }
-        public Task AddAuthor(Author author)
+        public Task CreateAuthor(Author author)
         {
             return repository.CreateAsync(author);
         }
@@ -66,6 +66,16 @@ namespace BLL.Services
         {
             Expression<Func<Author, bool>> expression = e => e.FullName == fullName;
             return repository.GetByFilterAsync(expression);
+        }
+
+        public Task CreateAuthors(IEnumerable<Author> authors)
+        {
+            return repository.CreateRangeAsync(authors);
+        }
+
+        public Task DeleteAll()
+        {
+            return repository.Clear();
         }
     }
 }

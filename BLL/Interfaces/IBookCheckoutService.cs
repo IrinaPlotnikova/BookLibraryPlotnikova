@@ -10,7 +10,9 @@ namespace BLL.Interfaces
 {
     public interface IBookCheckoutService
     {
-        public Task AddBookCheckout(BookCheckout bookCheckout);
+        public Task CreateBookCheckout(BookCheckout bookCheckout);
+
+        public Task CreateBookCheckouts(IEnumerable<BookCheckout> bookCheckouts);
 
         public Task<BookCheckout> GetBookCheckoutById(int bookCheckoutId);
 
@@ -21,5 +23,7 @@ namespace BLL.Interfaces
         public Task<ICollection<BookCheckout>> GetBookCheckoutsToReadersByDates(DateFilter filter);
 
         public Task<ICollection<BookCheckout>> GetBookCheckoutsFromReadersByDates(DateFilter filter);
+
+        public Task DeleteAll();
     }
 }

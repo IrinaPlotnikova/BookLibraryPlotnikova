@@ -26,6 +26,11 @@ namespace BLL.Services
             return repository.CreateAsync(reader);
         }
 
+        public Task CreateReaders(IEnumerable<Reader> readers)
+        {
+            return repository.CreateRangeAsync(readers);
+        }
+
         public Task<ICollection<Reader>> GetAllReaders()
         {
             return repository.GetAllAsync();
@@ -49,6 +54,11 @@ namespace BLL.Services
         public Task UpdateReader(Reader reader)
         {
             return repository.UpdateItemAsync(reader);
+        }
+
+        public Task DeleteAll()
+        {
+            return repository.Clear();
         }
     }
 }

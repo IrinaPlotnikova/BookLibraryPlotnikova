@@ -10,7 +10,9 @@ namespace BLL.Interfaces
 {
     public interface IAuthorService
     {
-        public Task AddAuthor(Author author);
+        public Task CreateAuthor(Author author);
+
+        public Task CreateAuthors(IEnumerable<Author> authors);
 
         public Task UpdateAuthor(Author author);
 
@@ -20,12 +22,14 @@ namespace BLL.Interfaces
 
         public Task<Author> GetAuthorById(int authorId);
 
-        public Task<ICollection<Book>> GetBooksByAuthorId(int countryId);
+        public Task<ICollection<Book>> GetBooksByAuthorId(int authorId);
 
         public Task<ICollection<Author>> GetAuthorsByCountries(AuthorFilter filter);
 
         public Task<ICollection<Author>> GetAuthorsById(AuthorFilter filter);
 
         public Task<ICollection<Author>> GetAuthorsByFullName(string fullName);
+
+        public Task DeleteAll();
     }
 }

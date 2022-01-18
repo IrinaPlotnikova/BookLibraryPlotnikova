@@ -23,5 +23,7 @@ namespace Domain.RepositoryInterfaces
         public Task<ICollection<T>> GetAllAsync();
 
         public Task<ICollection<T>> GetByFilterAsync(Expression<Func<T, bool>> expression);
+
+        public Task Clear();
     }
 }

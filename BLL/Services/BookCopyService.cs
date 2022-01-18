@@ -20,7 +20,7 @@ namespace BLL.Services
             this.repository = repository;
         }
 
-        public Task AddBookCopy(BookCopy bookCopy)
+        public Task CreateBookCopy(BookCopy bookCopy)
         {
             return repository.CreateAsync(bookCopy);
         }
@@ -36,9 +36,14 @@ namespace BLL.Services
             return repository.UpdateItemAsync(bookCopy);
         }
 
-        public Task AddBookCopies(IEnumerable<BookCopy> bookCopies)
+        public Task CreateBookCopies(IEnumerable<BookCopy> bookCopies)
         {
             return repository.CreateRangeAsync(bookCopies);
+        }
+
+        public Task DeleteAll()
+        {
+            return repository.Clear();
         }
     }
 }

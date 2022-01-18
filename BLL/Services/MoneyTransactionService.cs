@@ -20,7 +20,7 @@ namespace BLL.Services
             this.repository = repository;
         }
 
-        public Task AddMoneyTransaction(MoneyTransaction moneyTransaction)
+        public Task CreateMoneyTransaction(MoneyTransaction moneyTransaction)
         {
             return repository.CreateAsync(moneyTransaction);
         }
@@ -31,9 +31,14 @@ namespace BLL.Services
             return repository.GetByFilterAsync(expression);
         }
 
-        public Task AddMoneyTransactions(IEnumerable<MoneyTransaction> moneyTransactions)
+        public Task CreateMoneyTransactions(IEnumerable<MoneyTransaction> moneyTransactions)
         {
             return repository.CreateRangeAsync(moneyTransactions);
+        }
+
+        public Task DeleteAll()
+        {
+            return repository.Clear();
         }
     }
 }

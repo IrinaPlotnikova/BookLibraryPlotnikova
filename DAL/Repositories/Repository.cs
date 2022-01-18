@@ -65,5 +65,15 @@ namespace DAL.Repositories
             table.Update(item);
             await Context.SaveChangesAsync();
         }
+
+        public async Task Clear()
+        {
+            ICollection<T> items = await GetAllAsync();
+            foreach(T item in items)
+            {
+                table.Remove(item);
+            }
+            await Context.SaveChangesAsync();
+        }
     }
 }
