@@ -26,10 +26,7 @@ namespace LibraryPlotnikova.Controllers
         [HttpGet]
         public async Task<IActionResult> Index([FromQuery] AuthorFilter authorFilter)
         {
-            if (authorFilter == null)
-            {
-                authorFilter = new AuthorFilter();
-            }
+            authorFilter ??= new AuthorFilter();
 
             AllAuthorsModel model = new AllAuthorsModel()
             {
@@ -40,7 +37,8 @@ namespace LibraryPlotnikova.Controllers
                 Selected = authorFilter.CountriesId.Contains(e.Id)
                 }),
             };
-            return View("Index", model);
+
+            return View(nameof(Index), model);
         }
 
         [HttpGet]
@@ -50,19 +48,39 @@ namespace LibraryPlotnikova.Controllers
             {
                 AvailableCountries = (await _countryService.GetAllCountries()).Select(e => new SelectListItem() { Value = e.Id.ToString(), Text = e.Name })
             };
-            return View("Create", model);
+
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateFromModel([FromForm] Author author)
         {
-            if (author == null || !await VerifyAuthor(author))
+            if (!await VerifyAuthor(author))
             {
-                return RedirectToAction("Index");
+                return BadRequest();
+            }
+
+            if (!await VerifyDistinctAuthorName(author.FullName))
+            {
+                ModelState.AddModelError("FullName", "Автор с указанным полным именем уже существует");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                CreateAuthorModel model = new CreateAuthorModel()
+                {
+                    FullName = author.FullName,
+                    ShortName = author.ShortName,
+                    CountryId = author.Country?.Id,
+                    AvailableCountries = (await _countryService.GetAllCountries()).Select(e => new SelectListItem() { Value = e.Id.ToString(), Text = e.Name })
+                };
+
+                return View("Create", model);
             }
  
             await _authorService.CreateAuthor(author);
-            return RedirectToAction("Info", new { id = author.Id});
+
+            return RedirectToAction(nameof(Info), new { id = author.Id});
         }
 
         [HttpGet]
@@ -71,7 +89,7 @@ namespace LibraryPlotnikova.Controllers
             Author author = await _authorService.GetAuthorById(id);
             if (author == null)
             {
-                 return RedirectToAction("Index");
+                 return NotFound();
             }
 
             UpdateAuthorModel model =  new UpdateAuthorModel()
@@ -82,28 +100,48 @@ namespace LibraryPlotnikova.Controllers
                 CountryId = author.CountryId,
                 AvailableCountries = (await _countryService.GetAllCountries()).Select(e => new SelectListItem() { Value = e.Id.ToString(), Text = e.Name })
             };
-            return View("Update", model);
+
+            return View(nameof(Update), model);
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateFromModel([FromForm] Author authorFromModel)
         {
-            if (authorFromModel == null || !await VerifyAuthor(authorFromModel))
-            {
-                return RedirectToAction("Index");
-            }
-
             Author author = await _authorService.GetAuthorById(authorFromModel.Id);
             if (author == null)
             {
-                return RedirectToAction("Index");
+                return NotFound();
+            }
+
+            if (!await VerifyAuthor(authorFromModel))
+            {
+                return BadRequest();
+            }
+
+            if (!await VerifyDistinctAuthorName(authorFromModel.FullName, authorFromModel.Id))
+            {
+                ModelState.AddModelError("FullName", "Автор с указанным полным именем уже существует");
+            }
+
+            if (!ModelState.IsValid)   
+            {
+                CreateAuthorModel model = new CreateAuthorModel()
+                {
+                    FullName = author.FullName,
+                    ShortName = author.ShortName,
+                    CountryId = author.Country?.Id,
+                    AvailableCountries = (await _countryService.GetAllCountries()).Select(e => new SelectListItem() { Value = e.Id.ToString(), Text = e.Name })
+                };
+
+                return View("Create", model);
             }
 
             author.FullName = authorFromModel.FullName;
             author.ShortName = authorFromModel.ShortName;
             author.CountryId = authorFromModel.CountryId;
             await _authorService.UpdateAuthor(author);
-            return RedirectToAction("Info", new { id = author.Id});
+
+            return RedirectToAction(nameof(Info), new { id = author.Id});
         }
 
         [HttpGet]
@@ -112,21 +150,23 @@ namespace LibraryPlotnikova.Controllers
             Author author = await _authorService.GetAuthorById(id);
             if (author == null)
             {
-                return RedirectToAction("Index");
+                return NotFound();
             }
-            return View("ConfirmDeletion", author);
+
+            return View(author);
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            if (await _authorService.GetAuthorById(id) != null)
+            if (await _authorService.GetAuthorById(id) == null)
             {
-                await _authorService.DeleteAuthor(id);
+                return NotFound();
             }
-            return RedirectToAction("Index");
-        }
+            await _authorService.DeleteAuthor(id);
 
+            return RedirectToAction(nameof(Index));
+        }
 
         [HttpGet]
         public async Task<IActionResult> Info(int id)
@@ -134,18 +174,28 @@ namespace LibraryPlotnikova.Controllers
             Author author = await _authorService.GetAuthorById(id);
             if (author == null)
             {
-                return RedirectToAction("Index");
+                return NotFound();
             }
+
             return View("Info", author);
         }
 
         private async Task<bool> VerifyAuthor(Author author)
         {
-            IEnumerable<int> authorsId = (await _authorService.GetAuthorsByFullName(author.FullName)).Select(e => e.Id);
-            return !string.IsNullOrWhiteSpace(author.FullName) && author.FullName.Count() <= 100 &&
+            return author != null &&
+                !string.IsNullOrWhiteSpace(author.FullName) && author.FullName.Count() <= 100 &&
                 !string.IsNullOrWhiteSpace(author.ShortName) && author.ShortName.Count() <= 30 &&
-                (!authorsId.Any() || authorsId.Contains(author.Id)) &&
                 (author.CountryId == null || await _countryService.GetCountryById(author.CountryId.Value) != null);
+        }
+
+        private async Task<bool> VerifyDistinctAuthorName(string name, int id = 0)
+        {
+            if (name == null) 
+                return false;
+
+            IEnumerable<int> authorsId = (await _authorService.GetAuthorsByFullName(name)).Select(e => e.Id);
+
+            return !authorsId.Any() || authorsId.Contains(id);
         }
     }
 }
