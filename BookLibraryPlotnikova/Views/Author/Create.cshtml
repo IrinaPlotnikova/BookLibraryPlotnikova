@@ -21,7 +21,7 @@
 
         <div class="input-block">
             <label>Страна</label>
-            @Html.DropDownListFor(e => e.CountryId, Model.AvailableCountries, new { id = "dropDown" })
+            @Html.DropDownListFor(e => e.CountryId, Model.AvailableCountries, new { @class = "dropDown" })
         </div>
 
 
@@ -50,7 +50,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     <script>
         $(function () {
-            $('#dropDown').select2();
+            $('.dropDown').select2();
         });
     </script>
 }

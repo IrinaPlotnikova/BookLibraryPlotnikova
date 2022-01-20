@@ -24,7 +24,7 @@ namespace BLL.Services
             return repository.CreateAsync(author);
         }
 
-        public Task<Author> DeleteAuthor(int authorId) // TODO пересмотреть типы 
+        public Task<Author> DeleteAuthor(int authorId) 
         {
             return repository.DeleteItemAsync(authorId);
         }

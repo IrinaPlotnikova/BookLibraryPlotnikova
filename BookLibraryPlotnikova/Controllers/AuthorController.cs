@@ -38,7 +38,7 @@ namespace LibraryPlotnikova.Controllers
                 }),
             };
 
-            return View(nameof(Index), model);
+            return View(model);
         }
 
         [HttpGet]
@@ -101,7 +101,7 @@ namespace LibraryPlotnikova.Controllers
                 AvailableCountries = (await _countryService.GetAllCountries()).Select(e => new SelectListItem() { Value = e.Id.ToString(), Text = e.Name })
             };
 
-            return View(nameof(Update), model);
+            return View(model);
         }
 
         [HttpPost]
@@ -125,15 +125,15 @@ namespace LibraryPlotnikova.Controllers
 
             if (!ModelState.IsValid)   
             {
-                CreateAuthorModel model = new CreateAuthorModel()
+                UpdateAuthorModel model = new UpdateAuthorModel()
                 {
-                    FullName = author.FullName,
-                    ShortName = author.ShortName,
-                    CountryId = author.Country?.Id,
+                    FullName = authorFromModel.FullName,
+                    ShortName = authorFromModel.ShortName,
+                    CountryId = authorFromModel.CountryId,
                     AvailableCountries = (await _countryService.GetAllCountries()).Select(e => new SelectListItem() { Value = e.Id.ToString(), Text = e.Name })
                 };
 
-                return View("Create", model);
+                return View("Update", model);
             }
 
             author.FullName = authorFromModel.FullName;
@@ -177,7 +177,7 @@ namespace LibraryPlotnikova.Controllers
                 return NotFound();
             }
 
-            return View("Info", author);
+            return View(author);
         }
 
         private async Task<bool> VerifyAuthor(Author author)

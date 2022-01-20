@@ -34,25 +34,42 @@ namespace LibraryPlotnikova.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View("Index", await readerService.GetAllReaders());
+            return View(await readerService.GetAllReaders());
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-            return View("Create", new CreateReaderModel());
+            return View(new CreateReaderModel());
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateFromModel([FromForm] Reader reader)
         {
-            if (reader == null || !await VerifyReader(reader))
+            if (!VerifyReader(reader))
             {
-                return RedirectToAction("Index");
+                return BadRequest();
+            }
+
+            if (!await VerifyDistinctPassport(reader.Passport))
+            {
+                ModelState.AddModelError("Passport", "Читатель с данным паспортом уже зарегистрирован");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                CreateReaderModel model = new CreateReaderModel()
+                {
+                    Name = reader.Name,
+                    Passport = reader.Passport,
+                    Email = reader.Email,
+                };
+
+                return View("Create", model);
             }
 
             await readerService.CreateReader(reader);
-            return RedirectToAction("Info", new { id = reader.Id });
+            return RedirectToAction(nameof(Info), new { id = reader.Id });
         }
 
         [HttpGet]
@@ -62,7 +79,6 @@ namespace LibraryPlotnikova.Controllers
             if (reader == null)
             {
                 return NotFound();
-                // return RedirectToAction("Index");
             }
 
             UpdateReaderModel model =  new UpdateReaderModel()
@@ -72,22 +88,24 @@ namespace LibraryPlotnikova.Controllers
                 Email = reader.Email,
                 Passport = reader.Passport
             };
-            return View("Update", model);
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateFromModel([FromForm] Reader readerFromModel)
         {
-            if (readerFromModel == null || !await VerifyReader(readerFromModel))
+             Reader reader = await readerService.GetReaderById(readerFromModel.Id);
+            if (reader == null)
+            {
+                return NotFound();
+            }
+
+            if (readerFromModel == null || !VerifyReader(readerFromModel))
             {
                 return RedirectToAction("Index");
             }
 
-            Reader reader = await readerService.GetReaderById(readerFromModel.Id);
-            if (reader == null)
-            {
-                return RedirectToAction("Index");
-            }
+           
 
             reader.Name = readerFromModel.Name;
             reader.Email = readerFromModel.Email;
@@ -253,14 +271,23 @@ namespace LibraryPlotnikova.Controllers
             return RedirectToAction("Info", new { id = model.Reader.Id});
         }
 
-        private async Task<bool> VerifyReader(Reader reader)
+        private bool VerifyReader(Reader reader)
         {
             EmailAddressAttribute emailValidation = new EmailAddressAttribute();
-            IEnumerable<int> readersId = (await readerService.GetReadersByPassport(reader.Passport)).Select(r => r.Id);
-            return !string.IsNullOrWhiteSpace(reader.Name) && reader.Name.Length <= 150 &&
+            return reader != null &&
+                !string.IsNullOrWhiteSpace(reader.Name) && reader.Name.Length <= 150 &&
                 !string.IsNullOrWhiteSpace(reader.Passport) && reader.Passport.Length <= 20 &&
-                (!readersId.Any() || readersId.Contains(reader.Id)) &&
                 !string.IsNullOrWhiteSpace(reader.Email) && reader.Email.Length <= 40 && emailValidation.IsValid(reader.Email);
+        }
+
+        private async Task<bool> VerifyDistinctPassport(string passport, int id = 0)
+        {
+            if (passport == null)
+                return false;
+
+            IEnumerable<int> readersId = (await readerService.GetReadersByPassport(passport)).Select(r => r.Id);
+            
+            return !readersId.Any() || readersId.Contains(id);
         }
     }
 }

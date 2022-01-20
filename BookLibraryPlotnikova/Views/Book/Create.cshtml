@@ -39,7 +39,7 @@
         {
             <div class="input-block">
                 <label>Жанр</label>
-                @Html.DropDownListFor(e => e.GenreId, Model.AvailableGenres)
+                @Html.DropDownListFor(e => e.GenreId, Model.AvailableGenres, new{ @class="dropDown" })
             </div>
         }
 
@@ -47,7 +47,7 @@
         {
             <div class="input-block">
                 <label>Издатель</label>
-                @Html.DropDownListFor(e => e.PublisherId, Model.AvailablePublishers)
+                @Html.DropDownListFor(e => e.PublisherId, Model.AvailablePublishers, new { @class = "dropDown" })
             </div>
         }
 
@@ -55,23 +55,10 @@
         {
             <div class="input-block">
                 <label>Авторы</label>
-                <div class="input-block-multiselect">
-                    @foreach (var item in @Model.AvailableAuthors)
-                    {
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"
-                                       name="AuthorFilter.Ids"
-                                       value="@item.Value"
-                                       checked="@item.Selected" />
-                                @item.Text
-                            </label>
-                        </div>
-                    }
-                </div>
+                @Html.ListBoxFor(e => e.AuthorFilter.Ids, Model.AvailableAuthors, new { @class = "dropDown", multiple="true" })
             </div>
         }
-
+        
         <table>
             <tr>
                 <td>
@@ -92,4 +79,13 @@
 {
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script>
+        $(function () {
+            $('.dropDown').select2();
+        });
+    </script>
 }

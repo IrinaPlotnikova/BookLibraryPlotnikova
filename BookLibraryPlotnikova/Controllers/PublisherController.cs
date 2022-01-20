@@ -26,10 +26,7 @@ namespace LibraryPlotnikova.Controllers
         [HttpGet]
         public async Task<IActionResult> Index([FromQuery] PublisherFilter publisherFilter)
         {
-            if (publisherFilter == null)
-            {
-                publisherFilter = new PublisherFilter();
-            }
+            publisherFilter ??= new PublisherFilter();
 
             AllPublishersModel model = new AllPublishersModel()
             {
@@ -41,7 +38,8 @@ namespace LibraryPlotnikova.Controllers
                         Selected = publisherFilter.CountriesId.Contains(e.Id)
                     }),
             };
-            return View("Index", model);
+
+            return View(model);
         }
 
         [HttpGet]
@@ -51,19 +49,38 @@ namespace LibraryPlotnikova.Controllers
             {
                 AvailableCountries = (await countryService.GetAllCountries()).Select(e => new SelectListItem() { Value = e.Id.ToString(), Text = e.Name })
             };
-            return View("Create", model);
+
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateFromModel([FromForm] Publisher publisher)
         {
-            if (publisher == null || !await VerifyPublisher(publisher))
+            if (!await VerifyPublisher(publisher))
             {
-                return RedirectToAction("Index");
+                return BadRequest();
+            }
+
+            if (!await VerifyDistincPublisherName(publisher.Name))
+            {
+                ModelState.AddModelError("Name", "Издатель с таким названием уже существует");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                CreatePublisherModel model = new CreatePublisherModel()
+                {
+                    Name = publisher.Name,
+                    CountryId = publisher.CountryId,
+                    AvailableCountries = (await countryService.GetAllCountries()).Select(e => new SelectListItem() { Value = e.Id.ToString(), Text = e.Name })
+                };
+
+                return View("Create", model);
             }
 
             await publisherService.CreatePublisher(publisher);
-            return RedirectToAction("Info", new { id = publisher.Id });
+
+            return RedirectToAction(nameof(Info), new { id = publisher.Id });
         }
 
         [HttpGet]
@@ -72,7 +89,7 @@ namespace LibraryPlotnikova.Controllers
             Publisher publisher = await publisherService.GetPublisherById(id);
             if (publisher == null)
             {
-                 return RedirectToAction("Index");
+                 return NotFound();
             }
 
             UpdatePublisherModel model =  new UpdatePublisherModel()
@@ -82,27 +99,46 @@ namespace LibraryPlotnikova.Controllers
                 CountryId = publisher.CountryId,
                 AvailableCountries = (await countryService.GetAllCountries()).Select(e => new SelectListItem() { Value = e.Id.ToString(), Text = e.Name })
             };
-            return View("Update", model);
+
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateFromModel([FromForm] Publisher publisherFromModel)
         {
-            if (publisherFromModel == null || !await VerifyPublisher(publisherFromModel))
-            {
-                return RedirectToAction("Index");
-            }
-
             Publisher publisher = await publisherService.GetPublisherById(publisherFromModel.Id);
             if (publisher == null)
             {
-                return RedirectToAction("Index");
+                return NotFound();
+            }
+
+            if (!await VerifyPublisher(publisherFromModel))
+            {
+                return BadRequest();
+            }
+
+            if (!await VerifyDistincPublisherName(publisherFromModel.Name, publisherFromModel.Id))
+            {
+                ModelState.AddModelError("Name", "Издатель с таким названием уже существует");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                UpdatePublisherModel model = new UpdatePublisherModel()
+                {
+                    Name = publisherFromModel.Name,
+                    CountryId = publisherFromModel.CountryId,
+                    AvailableCountries = (await countryService.GetAllCountries()).Select(e => new SelectListItem() { Value = e.Id.ToString(), Text = e.Name })
+                };
+
+                return View("Update", model);
             }
 
             publisher.Name = publisherFromModel.Name;
             publisher.CountryId = publisherFromModel.CountryId;
             await publisherService.UpdatePublisher(publisher);
-            return RedirectToAction("Info", new { id = publisher.Id});
+
+            return RedirectToAction(nameof(Info), new { id = publisher.Id});
         }
 
         [HttpGet]
@@ -111,19 +147,23 @@ namespace LibraryPlotnikova.Controllers
             Publisher publisher = await publisherService.GetPublisherById(id);
             if (publisher == null)
             {
-                return RedirectToAction("Index");
+                return NotFound();
             }
-            return View("ConfirmDeletion", publisher);
+
+            return View(publisher);
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            if (await publisherService.GetPublisherById(id) != null)
+            if (await publisherService.GetPublisherById(id) == null)
             {
-                await publisherService.DeletePublisher(id);
+                return NotFound();
             }
-            return RedirectToAction("Index");
+
+            await publisherService.DeletePublisher(id);
+
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
@@ -132,17 +172,27 @@ namespace LibraryPlotnikova.Controllers
             Publisher publisher = await publisherService.GetPublisherById(id);
             if (publisher == null)
             {
-                return RedirectToAction("Index");
+                return NotFound();
             }
-            return View("Info", publisher);
+
+            return View(publisher);
         }
 
         private async Task<bool> VerifyPublisher(Publisher publisher)
-        {
-            IEnumerable<int> publishersId = (await publisherService.GetPublishersByName(publisher.Name)).Select(r => r.Id);
-            return !string.IsNullOrWhiteSpace(publisher.Name) && publisher.Name.Length <= 100 && 
-                (!publishersId.Any() || publishersId.Contains(publisher.Id)) &&
+        {   
+            return publisher != null &&
+                !string.IsNullOrWhiteSpace(publisher.Name) && publisher.Name.Length <= 100 && 
                 (publisher.CountryId == null || (await countryService.GetCountryById(publisher.CountryId.Value)) != null);
+        }
+
+        private async Task<bool> VerifyDistincPublisherName(string name, int id = 0)
+        {
+            if (name == null)
+                return false;
+
+            IEnumerable<int> publishersId = (await publisherService.GetPublishersByName(name)).Select(r => r.Id);
+
+            return  !publishersId.Any() || publishersId.Contains(id);
         }
     }
 }

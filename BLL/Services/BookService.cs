@@ -32,7 +32,7 @@ namespace BLL.Services
 
         public Task<ICollection<Book>> GetAllBooks()
         {
-            return repository.GetAllAsync();  // TODO заменить на дто
+            return repository.GetAllAsync();  
         }
 
         public Task<Book> GetBookById(int bookId)

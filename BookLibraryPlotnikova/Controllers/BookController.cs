@@ -60,7 +60,7 @@ namespace LibraryPlotnikova.Controllers
                     }),
             };
 
-            return View("Index", model);
+            return View(model);
         }
 
         [HttpGet]
@@ -74,21 +74,58 @@ namespace LibraryPlotnikova.Controllers
                 AuthorFilter = new AuthorFilter()
             }; 
 
-            return View(nameof(Create), model);
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateFromModel([FromForm] Book book, [FromForm] AuthorFilter authorFilter, [FromForm] int numberOfCopies)
         {
-            if (book == null || !await VerifyBook(book)) // TODO проверить на налл в VerifyBook
+            if (!await VerifyBook(book)) 
             {
-                return RedirectToAction("Index"); //TODO поменять все на nameof
+                return BadRequest();
+            }
+
+            if (!await VerifyDistinctBookName(book.Name))
+            {
+                ModelState.AddModelError("Name", "Книга с таким названием уже зарегистрирована");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                CreateBookModel model = new CreateBookModel()
+                {
+                    Name = book.Name,
+                    NumberOfPages = book.NumberOfPages,
+                    PublishmentYear = book.PublishmentYear,
+                    NumberOfCopies = numberOfCopies,
+                    Price = book.Price,
+                    GenreId = book.GenreId,
+                    PublisherId = book.PublisherId,
+                    AuthorFilter = authorFilter,
+                    AvailableAuthors = (await authorService.GetAllAuthors()).Select(e => new SelectListItem() 
+                        { 
+                            Value = e.Id.ToString(), 
+                            Text = e.FullName, 
+                            Selected = authorFilter.Ids.Contains(e.Id) 
+                        }),
+                    AvailableGenres = (await genreService.GetAllGenres()).Select(e => new SelectListItem() 
+                        { 
+                            Value = e.Id.ToString(), 
+                            Text = e.Name 
+                        }),
+                    AvailablePublishers = (await publisherService.GetAllPublishers()).Select(e => new SelectListItem() 
+                        { 
+                            Value = e.Id.ToString(), 
+                            Text = e.Name 
+                        }),
+                };
+
+                return View("Create", model);
             }
 
             book.Authors = await authorService.GetAuthorsById(authorFilter);
             await bookService.CreateBook(book);
 
-  
             ICollection<BookCopy> copies = CreateBookCopies(book.Id, numberOfCopies, DateTime.Today);
             await bookCopyService.CreateBookCopies(copies);
 
@@ -98,19 +135,20 @@ namespace LibraryPlotnikova.Controllers
             return RedirectToAction(nameof(Info), new { id = book.Id});
         }
 
-         [HttpGet]
+        [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
             Book book = await bookService.GetBookById(id);
             if (book == null)
             {
-                 return RedirectToAction("Index");
+                 return NotFound();
             }
 
             AuthorFilter authorFilter = new AuthorFilter()
-                {
-                    Ids = book.Authors.Select(e => e.Id).ToList(),
-                };
+            {
+                Ids = book.Authors.Select(e => e.Id).ToList(),
+            };
+
             UpdateBookModel model =  new UpdateBookModel()
             {
                 Id = id,
@@ -138,22 +176,62 @@ namespace LibraryPlotnikova.Controllers
                         Text = e.Name 
                     }),
             };
-            return View("Update", model);
+
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateFromModel([FromForm] Book bookFromModel, [FromForm] AuthorFilter authorFilter)
         {
-            if (bookFromModel == null || !await VerifyBook(bookFromModel))
-            {
-                return RedirectToAction("Index");
-            }
-
             Book book = await bookService.GetBookById(bookFromModel.Id);
             if (book == null)
             {
-                return RedirectToAction("Index");
+                return NotFound();
             }
+
+            if (!await VerifyBook(bookFromModel))
+            {
+                return BadRequest();
+            }
+
+            if (!await VerifyDistinctBookName(bookFromModel.Name, bookFromModel.Id))
+            {
+                ModelState.AddModelError("Name", "Книга с таким названием уже существует");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                UpdateBookModel model =  new UpdateBookModel()
+                {
+                    Id = bookFromModel.Id,
+                    Name = bookFromModel.Name,
+                    NumberOfPages = bookFromModel.NumberOfPages,
+                    PublishmentYear = bookFromModel.PublishmentYear,
+                    Price = bookFromModel.Price,
+                    GenreId = bookFromModel.GenreId,
+                    PublisherId = bookFromModel.PublisherId,
+                    AuthorFilter = authorFilter,
+                    AvailableAuthors = (await authorService.GetAllAuthors()).Select(e => new SelectListItem() 
+                        { 
+                            Value = e.Id.ToString(), 
+                            Text = e.FullName, 
+                            Selected = authorFilter.Ids.Contains(e.Id) 
+                        }),
+                    AvailableGenres = (await genreService.GetAllGenres()).Select(e => new SelectListItem() 
+                        { 
+                            Value = e.Id.ToString(), 
+                            Text = e.Name 
+                        }),
+                    AvailablePublishers = (await publisherService.GetAllPublishers()).Select(e => new SelectListItem() 
+                        { 
+                            Value = e.Id.ToString(), 
+                            Text = e.Name 
+                        }),
+                };
+
+                return View("Update", model);
+            }
+            
 
             ICollection<Author> authors = await authorService.GetAuthorsById(authorFilter);
             book.Name = bookFromModel.Name;
@@ -163,9 +241,9 @@ namespace LibraryPlotnikova.Controllers
             book.GenreId = bookFromModel.GenreId;
             book.PublisherId = bookFromModel.PublisherId;
             book.Authors = authors;
-            
             await bookService.UpdateBook(book);
-            return RedirectToAction("Info", new { id = book.Id});
+
+            return RedirectToAction(nameof(Info), new { id = book.Id});
         }
 
         [HttpGet]
@@ -174,40 +252,55 @@ namespace LibraryPlotnikova.Controllers
             Book book = await bookService.GetBookById(id);
             if (book == null)
             {
-                return RedirectToAction("Index");
+                return NotFound();
             }
-            return View("ConfirmDeletion", book);
+
+            return View(book);
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            if (await bookService.GetBookById(id) != null)
+            if (await bookService.GetBookById(id) == null)
             {
-                await bookService.DeleteBook(id);
+                return NotFound();
             }
-            return RedirectToAction("Index");
+
+            await bookService.DeleteBook(id);
+
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
         public async Task<IActionResult> Info(int id)
         {
             Book book = await bookService.GetBookById(id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+
             BookInfoModel model = new BookInfoModel()
             {
                 Book = book,
                 BookCopiesLibrary = book.BookCopies.Where(e => e.BookStatusId == 1),
                 BookCopiesReader = book.BookCopies.Where(e => e.BookStatusId == 2),
             };
-            return View("Info", model);
+
+            return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> AddCopy(int bookId)
         {
             Book book = await bookService.GetBookById(bookId);
+            if (book == null)
+            {
+                return NotFound();
+            }
             await AddBookCopyAsync(book);
-            return RedirectToAction("Index");
+
+            return RedirectToAction(nameof(Index));
         }
 
         private ICollection<BookCopy> CreateBookCopies(int bookId, int numberOfCopies, DateTime dateAdded) 
@@ -218,7 +311,7 @@ namespace LibraryPlotnikova.Controllers
                 BookCopy copy = new BookCopy()
                 {
                     BookId = bookId,
-                    BookStatusId = 1, // TODO на бул
+                    BookStatusId = 1, 
                     DateAdded = dateAdded,
                 };
                 copies.Add(copy);
@@ -265,14 +358,23 @@ namespace LibraryPlotnikova.Controllers
         {
             if (book == null) 
                 return false;
-
-            IEnumerable<int> booksId = (await bookService.GetBooksByName(book.Name)).Select(e => e.Id);
-            return !string.IsNullOrWhiteSpace(book.Name) && book.Name.Length <= 100 && (!booksId.Any() || booksId.Contains(book.Id)) &&
+            
+            return !string.IsNullOrWhiteSpace(book.Name) && book.Name.Length <= 100 &&
                 1 <= book.NumberOfPages && book.NumberOfPages <= int.MaxValue &&
                 1800 <= book.PublishmentYear && book.PublishmentYear <= DateTime.Today.Year &&
                 1 <= book.Price && book.Price <= int.MaxValue &&
                 (book.GenreId == null || (await genreService.GetGenderById(book.GenreId.Value)) != null) &&
                 (book.PublisherId == null || (await publisherService.GetPublisherById(book.PublisherId.Value)) != null);
+        }
+
+
+        private async Task<bool> VerifyDistinctBookName(string name, int id = 0)
+        {
+            if (name == null)
+                return false;
+
+            IEnumerable<int> booksId = (await bookService.GetBooksByName(name)).Select(e => e.Id);
+            return !booksId.Any() || booksId.Contains(id);
         }
     }
 }

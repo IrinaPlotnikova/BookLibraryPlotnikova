@@ -403,9 +403,7 @@ D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\obj\Debug\net5.0\Razor\Views
 D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\obj\Debug\net5.0\Razor\Views\Reader\TakeBooks.cshtml.g.cs
 D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\obj\Debug\net5.0\Razor\Views\Home\Statistics.cshtml.g.cs
 D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\obj\Debug\net5.0\Razor\Views\Author\Update.cshtml.g.cs
-D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\obj\Debug\net5.0\Razor\Views\Publisher\ConfirmDeletion.cshtml.g.cs
 D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\obj\Debug\net5.0\Razor\Views\Publisher\Update.cshtml.g.cs
-D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\obj\Debug\net5.0\Razor\Views\Book\ConfirmDeletion.cshtml.g.cs
 D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\obj\Debug\net5.0\Razor\Views\Book\Update.cshtml.g.cs
 D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\obj\Debug\net5.0\Razor\Views\Reader\ConfirmDeletion.cshtml.g.cs
 D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\obj\Debug\net5.0\Razor\Views\Reader\Update.cshtml.g.cs
@@ -414,3 +412,5 @@ D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\bin\Debug\net5.0\DocumentFor
 D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\bin\Debug\net5.0\ExcelNumberFormat.dll
 D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\bin\Debug\net5.0\System.IO.Packaging.dll
 D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\obj\Debug\net5.0\Razor\Views\Author\DeletionAttempt.cshtml.g.cs
+D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\obj\Debug\net5.0\Razor\Views\Publisher\DeletionAttempt.cshtml.g.cs
+D:\VSU\Labs\5th_semester\.Net\BookLibraryPlotnikova\obj\Debug\net5.0\Razor\Views\Book\DeletionAttempt.cshtml.g.cs
