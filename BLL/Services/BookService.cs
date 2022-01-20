@@ -47,7 +47,7 @@ namespace BLL.Services
 
         public Task<ICollection<Book>> GetAvailableBooks()
         {
-            Expression<Func<Book, bool>> expression = e => e.BookCopies.Where(p => p.BookStatusId == 1).Count() != 0;
+            Expression<Func<Book, bool>> expression = e => e.BookCopies.Any(p => p.ReaderId == null);
             return repository.GetByFilterAsync(expression);
         }
 

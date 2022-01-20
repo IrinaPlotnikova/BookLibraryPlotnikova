@@ -12,6 +12,10 @@ namespace BLL.Interfaces
     {
         public Task CreateCountry(Country country);
 
+        public Task CreateCountries(IEnumerable<Country> countries);
+
+        public Task DeleteAll();
+
         public Task UpdateCountry(Country country);
 
         public Task<Country> DeleteCountry(int countryId);

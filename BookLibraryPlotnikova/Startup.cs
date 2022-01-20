@@ -28,7 +28,7 @@ namespace BookLibraryPlotnikova
         {
             services.AddControllersWithViews();
             var connectionString = Configuration.GetConnectionString("LibraryContext");
-            services.AddDbContext<LibraryContext>(ops => ops.UseNpgsql(connectionString));
+            services.AddDbContext<LibraryContext>(ops => ops.UseSqlServer(connectionString));
 
             services.AddScoped<IRepository<Country>, CountryRepository>();
             services.AddScoped<ICountryService, CountryService>();
@@ -56,6 +56,9 @@ namespace BookLibraryPlotnikova
 
             services.AddScoped<IRepository<BookCheckout>, BookCheckoutRepository>();
             services.AddScoped<IBookCheckoutService, BookCheckoutService>();
+
+            services.AddScoped<IRepository<MoneyTransactionType>, MoneyTransactionTypeRepository>();
+            services.AddScoped<IMoneyTransactionTypeService, MoneyTransactionTypeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -19,8 +19,6 @@ namespace DAL
 
         public DbSet<BookCopy> BookCopies { get; set; }
 
-        public DbSet<BookStatus> BookStatuses { get; set; }
-
         public DbSet<Country> Countries { get; set; }
 
         public DbSet<Genre> Genres { get; set; }
@@ -35,7 +33,7 @@ namespace DAL
 
         public LibraryContext(DbContextOptions<LibraryContext> options) : base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -44,7 +42,6 @@ namespace DAL
             modelBuilder.ApplyConfiguration(new BookCheckoutConfiguration());
             modelBuilder.ApplyConfiguration(new BookConfiguration());
             modelBuilder.ApplyConfiguration(new BookCopyConfiguration());
-            modelBuilder.ApplyConfiguration(new BookStatusConfiguration());
             modelBuilder.ApplyConfiguration(new CountryConfiguration());
             modelBuilder.ApplyConfiguration(new GenreConfiguration());
             modelBuilder.ApplyConfiguration(new MoneyTransactionConfiguration());

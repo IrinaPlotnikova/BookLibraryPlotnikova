@@ -14,5 +14,7 @@ namespace BLL.Interfaces
         public Task<Genre> GetGenderById(int genderId);
 
         public Task DeleteAll();
+
+         public Task CreateGenres(IEnumerable<Genre> genres);
     }
 }

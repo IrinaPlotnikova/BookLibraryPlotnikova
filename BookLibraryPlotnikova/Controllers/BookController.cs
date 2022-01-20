@@ -283,8 +283,8 @@ namespace LibraryPlotnikova.Controllers
             BookInfoModel model = new BookInfoModel()
             {
                 Book = book,
-                BookCopiesLibrary = book.BookCopies.Where(e => e.BookStatusId == 1),
-                BookCopiesReader = book.BookCopies.Where(e => e.BookStatusId == 2),
+                BookCopiesLibrary = book.BookCopies.Where(e => e.ReaderId == null),
+                BookCopiesReader = book.BookCopies.Where(e => e.ReaderId != null),
             };
 
             return View(model);
@@ -311,7 +311,7 @@ namespace LibraryPlotnikova.Controllers
                 BookCopy copy = new BookCopy()
                 {
                     BookId = bookId,
-                    BookStatusId = 1, 
+                    ReaderId = null,
                     DateAdded = dateAdded,
                 };
                 copies.Add(copy);
@@ -342,7 +342,7 @@ namespace LibraryPlotnikova.Controllers
 
         private async Task AddBookCopyAsync(Book book)
         {
-            BookCopy bookCopy = new BookCopy() { BookId = book.Id, BookStatusId = 1, DateAdded = DateTime.Today };
+            BookCopy bookCopy = new BookCopy() { BookId = book.Id, ReaderId = null, DateAdded = DateTime.Today };
             await bookCopyService.CreateBookCopy(bookCopy);
             MoneyTransaction transaction = new MoneyTransaction()
             {

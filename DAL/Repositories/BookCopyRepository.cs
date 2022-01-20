@@ -20,7 +20,6 @@ namespace DAL.Repositories
         {
             return await Context.BookCopies
                 .Include(e => e.Book)
-                .Include(e => e.BookStatus)
                 .Include(e => e.Reader)
                 .Include(e => e.BookCheckouts)
                 .Include(e => e.MoneyTransactions)
@@ -32,7 +31,6 @@ namespace DAL.Repositories
             return await Context.BookCopies
                 .Include(e => e.Book)
                 .Include(e => e.Reader)
-                .Include(e => e.BookStatus)
                 .Include(e => e.BookCheckouts)
                 .Include(e => e.MoneyTransactions)
                 .Where(expression)
@@ -44,7 +42,6 @@ namespace DAL.Repositories
             return await Context.BookCopies
                 .Include(e => e.Book)
                 .Include(e => e.Reader)
-                .Include(e => e.BookStatus)
                 .Include(e => e.BookCheckouts)
                 .Include(e => e.MoneyTransactions)
                 .FirstOrDefaultAsync(e => e.Id == id);

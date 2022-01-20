@@ -32,5 +32,10 @@ namespace BLL.Services
         {
             return repository.Clear();
         }
+
+        public Task CreateGenres(IEnumerable<Genre> genres)
+        {
+            return repository.CreateRangeAsync(genres);
+        }
     }
 }

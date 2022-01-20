@@ -94,24 +94,39 @@ namespace LibraryPlotnikova.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateFromModel([FromForm] Reader readerFromModel)
         {
-             Reader reader = await readerService.GetReaderById(readerFromModel.Id);
+            Reader reader = await readerService.GetReaderById(readerFromModel.Id);
             if (reader == null)
             {
                 return NotFound();
             }
 
-            if (readerFromModel == null || !VerifyReader(readerFromModel))
+            if (!VerifyReader(readerFromModel))
             {
-                return RedirectToAction("Index");
+                return BadRequest();
             }
 
-           
+            if (!await VerifyDistinctPassport(reader.Passport))
+            {
+                ModelState.AddModelError("Passport", "Читатель с таким паспортом уже зарегистрирован");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                UpdateReaderModel model = new UpdateReaderModel()
+                {
+                    Name = readerFromModel.Name,
+                    Passport = readerFromModel.Passport,
+                    Email = readerFromModel.Email
+                };
+
+                return View("Update", model);
+            }
 
             reader.Name = readerFromModel.Name;
             reader.Email = readerFromModel.Email;
             reader.Passport = readerFromModel.Passport;
             await readerService.UpdateReader(reader);
-            return RedirectToAction("Info", new { id = reader.Id});
+            return RedirectToAction(nameof(Info), new { id = reader.Id});
         }
 
         [HttpGet]
@@ -120,9 +135,9 @@ namespace LibraryPlotnikova.Controllers
             Reader reader = await readerService.GetReaderById(id);
             if (reader == null)
             {
-                return RedirectToAction("Index");
+                return NotFound();
             }
-            return View("ConfirmDeletion", reader);
+            return View(reader);
         }
 
         [HttpGet]
@@ -141,7 +156,7 @@ namespace LibraryPlotnikova.Controllers
             Reader reader = await readerService.GetReaderById(id);
             if (reader == null)
             {
-                return RedirectToAction("Index");
+                return NotFound();
             }
 
             InfoReaderModel model = new InfoReaderModel()
@@ -150,7 +165,7 @@ namespace LibraryPlotnikova.Controllers
                 BookCheckoutsCurrent = reader.BookCheckouts.Where(e => e.DateBookReturned == null),
                 BookCheckoutsHistory = reader.BookCheckouts.Where(e => e.DateBookReturned != null)
             };
-            return View("Info", model);
+            return View(model);
         }
 
         [HttpGet]
@@ -159,7 +174,7 @@ namespace LibraryPlotnikova.Controllers
             Reader reader = await readerService.GetReaderById(readerId);
             if (reader == null)
             {
-                return RedirectToAction("Index");
+                return NotFound();
             }
 
             GiveBooksModel model = new GiveBooksModel()
@@ -167,7 +182,7 @@ namespace LibraryPlotnikova.Controllers
                 Reader = reader,
                 AvailableBooks = (await bookService.GetAvailableBooks()).Select(e => new SelectListItem() { Value = e.Id.ToString(), Text = e.Name }),
             };
-            return View("GiveBooks", model);
+            return View(model);
         }
 
         [HttpPost]
@@ -177,7 +192,7 @@ namespace LibraryPlotnikova.Controllers
             DateTime dateFinish = dateStart.AddMonths(3);
             if (await readerService.GetReaderById(model.Reader.Id) == null)
             {
-                return RedirectToAction("Index");
+                return NotFound();
             }
 
             foreach(int bookId in model.SelectedBooksId)
@@ -198,14 +213,13 @@ namespace LibraryPlotnikova.Controllers
                             DateBookReturned = null,
                             OverdueFine = Math.Max(5, (int)(book.Price * 0.01))
                         };
-                        bookCopy.BookStatusId = 2;
                         bookCopy.ReaderId = model.Reader.Id;
                         await bookCopyService.UpdateBookCopy(bookCopy);
                         await bookCheckoutService.CreateBookCheckout(bookCheckout);
                     }
                 }
             }
-            return RedirectToAction("Info", new { id = model.Reader.Id});
+            return RedirectToAction(nameof(Info), new { id = model.Reader.Id});
         }
 
 
@@ -215,7 +229,7 @@ namespace LibraryPlotnikova.Controllers
             Reader reader = await readerService.GetReaderById(readerId);
             if (reader == null)
             {
-                return RedirectToAction("Index");
+                return NotFound();
             }
 
             TakeBooksModel model = new TakeBooksModel()
@@ -227,7 +241,7 @@ namespace LibraryPlotnikova.Controllers
                     Text = e.BookCopy.Book.Name + "   "+ ((DateTime.Now - e.DateFinish).Days > 0 ? $"Штраф: {(DateTime.Now - e.DateFinish).Days * e.OverdueFine} р." : "")
                 }),
             };
-            return View("TakeBooks", model);
+            return View(model);
         }
 
         [HttpPost]
@@ -237,7 +251,7 @@ namespace LibraryPlotnikova.Controllers
             Reader reader = await readerService.GetReaderById(model.Reader.Id);
             if (reader == null)
             {
-                return RedirectToAction("Index");
+                return NotFound();
             }
 
             foreach(int bookCheckoutId in model.SelectedBookCheckoutsId)
@@ -250,7 +264,6 @@ namespace LibraryPlotnikova.Controllers
 
                     BookCopy bookCopy = bookCheckout.BookCopy;
                     bookCopy.ReaderId = null;
-                    bookCopy.BookStatusId = 1;
                     await bookCopyService.UpdateBookCopy(bookCopy);
                 
                     if (today > bookCheckout.DateFinish)
@@ -268,7 +281,7 @@ namespace LibraryPlotnikova.Controllers
                     }
                 }
             }
-            return RedirectToAction("Info", new { id = model.Reader.Id});
+            return RedirectToAction(nameof(Info), new { id = model.Reader.Id});
         }
 
         private bool VerifyReader(Reader reader)

@@ -22,6 +22,7 @@
     <Import Project="$(NuGetPackageRoot)entityframework\6.4.4\buildTransitive\netcoreapp3.0\EntityFramework.props" Condition="Exists('$(NuGetPackageRoot)entityframework\6.4.4\buildTransitive\netcoreapp3.0\EntityFramework.props')" />
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgNewtonsoft_Json Condition=" '$(PkgNewtonsoft_Json)' == '' ">C:\Users\Irina\.nuget\packages\newtonsoft.json\10.0.1</PkgNewtonsoft_Json>
     <PkgMicrosoft_CodeAnalysis_Analyzers Condition=" '$(PkgMicrosoft_CodeAnalysis_Analyzers)' == '' ">C:\Users\Irina\.nuget\packages\microsoft.codeanalysis.analyzers\3.0.0</PkgMicrosoft_CodeAnalysis_Analyzers>
     <PkgjQuery Condition=" '$(PkgjQuery)' == '' ">C:\Users\Irina\.nuget\packages\jquery\3.6.0</PkgjQuery>
     <PkgjQuery_UI_Combined Condition=" '$(PkgjQuery_UI_Combined)' == '' ">C:\Users\Irina\.nuget\packages\jquery.ui.combined\1.13.0</PkgjQuery_UI_Combined>

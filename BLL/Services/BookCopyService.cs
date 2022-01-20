@@ -27,7 +27,7 @@ namespace BLL.Services
 
         public Task<ICollection<BookCopy>> GetAvailableCopiesByBookId(int bookId)
         {
-            Expression<Func<BookCopy, bool>> expression = e => e.BookId == bookId && e.BookStatusId == 1;
+            Expression<Func<BookCopy, bool>> expression = e => e.BookId == bookId && e.ReaderId == null;
             return repository.GetByFilterAsync(expression);
         }
 

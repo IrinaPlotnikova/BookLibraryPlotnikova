@@ -53,5 +53,15 @@ namespace BLL.Services
         {
             return repository.UpdateItemAsync(country);
         }
+
+        public Task CreateCountries(IEnumerable<Country> countries)
+        {
+            return repository.CreateRangeAsync(countries);
+        }
+
+        public Task DeleteAll()
+        {
+            return repository.Clear();
+        }
     }
 }

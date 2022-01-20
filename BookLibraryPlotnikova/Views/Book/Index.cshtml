@@ -35,8 +35,8 @@
                 <tbody>
                     @foreach (var item in @Model.Books)
                     {
-                        int numberOfBooks = item.BookCopies.Count(e => e.BookStatusId == 1 || e.BookStatusId == 2);
-                        int numberOfGivenBooks = item.BookCopies.Count(e => e.BookStatusId == 2);
+                        int numberOfBooks = item.BookCopies.Count();
+                        int numberOfGivenBooks = item.BookCopies.Count(e => e.ReaderId != null);
                         int numberOfBooksInLibrary = numberOfBooks - numberOfGivenBooks;
 
                         <tr>

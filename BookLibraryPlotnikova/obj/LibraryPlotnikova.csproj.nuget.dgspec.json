@@ -151,6 +151,10 @@
               "target": "Package",
               "version": "[5.0.13, )"
             },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[5.0.13, )"
+            },
             "Microsoft.Web.Infrastructure": {
               "target": "Package",
               "version": "[1.0.0, )"
@@ -241,6 +245,10 @@
               "version": "[6.4.4, )"
             },
             "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.13, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[5.0.13, )"
             },
