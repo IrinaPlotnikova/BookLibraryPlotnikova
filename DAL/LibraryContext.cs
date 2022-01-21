@@ -33,7 +33,7 @@ namespace DAL
 
         public LibraryContext(DbContextOptions<LibraryContext> options) : base(options)
         {
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
