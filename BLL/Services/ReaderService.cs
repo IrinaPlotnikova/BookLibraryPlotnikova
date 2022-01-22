@@ -38,7 +38,7 @@ namespace BLL.Services
 
         public Task<ICollection<Reader>> GetReadersByPassport(string passport)
         {
-            return repository.GetByFilterAsync(e => e.Passport == passport);
+           return repository.GetByFilterAsync(e => e.Passport.ToLower() == passport.ToLower());
         }
 
         public Task<Reader> DeleteReader(int authorId)

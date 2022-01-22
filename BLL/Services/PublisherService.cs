@@ -55,8 +55,7 @@ namespace BLL.Services
 
         public Task<ICollection<Publisher>> GetPublishersByName(string name)
         {
-            Expression<Func<Publisher, bool>> expression = e => e.Name == name;
-            return repository.GetByFilterAsync(expression);
+            return repository.GetByFilterAsync(e => e.Name.ToLower() == name.ToLower());
         }
 
         public Task CreatePublishers(IEnumerable<Publisher> publishers)

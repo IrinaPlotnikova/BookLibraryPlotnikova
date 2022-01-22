@@ -53,9 +53,9 @@ namespace BLL.Services
 
         public Task<ICollection<Book>> GetBooksByGenresAuthorsAndPublishersId(BookFilter bookFilter)
         {
-            bool isGenresIdEmpty = bookFilter.GenresId.Count() == 0;
-            bool isAuthorsIdEmpty = bookFilter.AuthorsId.Count() == 0;
-            bool isPublishersIdEmpty = bookFilter.PublishersId.Count() == 0;
+            bool isGenresIdEmpty = bookFilter.GenresId.Count == 0;
+            bool isAuthorsIdEmpty = bookFilter.AuthorsId.Count == 0;
+            bool isPublishersIdEmpty = bookFilter.PublishersId.Count == 0;
             IEnumerable<int> authorsId = bookFilter.AuthorsId;
             
             Expression<Func<Book, bool>> expression = e => (isGenresIdEmpty || bookFilter.GenresId.Contains(e.GenreId)) &&
@@ -67,8 +67,7 @@ namespace BLL.Services
 
         public Task<ICollection<Book>> GetBooksByName(string name)
         {
-            Expression<Func<Book, bool>> expression = e => e.Name == name;
-            return repository.GetByFilterAsync(expression);
+            return repository.GetByFilterAsync(e => e.Name.ToLower() == name.ToLower());
         }
 
         public Task CreateBooks(IEnumerable<Book> books)

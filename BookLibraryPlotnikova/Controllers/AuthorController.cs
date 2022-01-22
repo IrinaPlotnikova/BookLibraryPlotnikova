@@ -55,6 +55,7 @@ namespace LibraryPlotnikova.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateFromModel([FromForm] Author author)
         {
+            Normalize(author);
             if (!await VerifyAuthor(author))
             {
                 return BadRequest();
@@ -113,6 +114,7 @@ namespace LibraryPlotnikova.Controllers
                 return NotFound();
             }
 
+            Normalize(authorFromModel);
             if (!await VerifyAuthor(authorFromModel))
             {
                 return BadRequest();
@@ -183,8 +185,8 @@ namespace LibraryPlotnikova.Controllers
         private async Task<bool> VerifyAuthor(Author author)
         {
             return author != null &&
-                !string.IsNullOrWhiteSpace(author.FullName) && author.FullName.Count() <= 100 &&
-                !string.IsNullOrWhiteSpace(author.ShortName) && author.ShortName.Count() <= 30 &&
+                !string.IsNullOrWhiteSpace(author.FullName) && author.FullName.Length <= 100 &&
+                !string.IsNullOrWhiteSpace(author.ShortName) && author.ShortName.Length <= 30 &&
                 (author.CountryId == null || await _countryService.GetCountryById(author.CountryId.Value) != null);
         }
 
@@ -196,6 +198,25 @@ namespace LibraryPlotnikova.Controllers
             IEnumerable<int> authorsId = (await _authorService.GetAuthorsByFullName(name)).Select(e => e.Id);
 
             return !authorsId.Any() || authorsId.Contains(id);
+        }
+
+        private void Normalize(Author author)
+        {
+            if (author == null)
+                return;
+
+            if (author.FullName != null)
+            {
+                string[] strs = author.FullName.Split(' ').Where(e => e.Length != 0).ToArray();
+                author.FullName = string.Join(' ', strs);
+            }
+
+            
+            if (author.ShortName != null)
+            {
+                string[] strs = author.ShortName.Split(' ').Where(e => e.Length != 0).ToArray();
+                author.ShortName = string.Join(' ', strs);
+            }
         }
     }
 }

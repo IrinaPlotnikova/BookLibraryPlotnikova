@@ -376,5 +376,17 @@ namespace LibraryPlotnikova.Controllers
             IEnumerable<int> booksId = (await bookService.GetBooksByName(name)).Select(e => e.Id);
             return !booksId.Any() || booksId.Contains(id);
         }
+
+        private void Normalize(Book book)
+        {
+            if (book == null)
+                return;
+
+            if (book.Name != null)
+            {
+                string[] strs = book.Name.Split(' ').Where(e => e.Length != 0).ToArray();
+                book.Name = string.Join(' ', strs);
+            }
+        }
     }
 }

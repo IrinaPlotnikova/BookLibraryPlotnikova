@@ -64,8 +64,7 @@ namespace BLL.Services
 
         public Task<ICollection<Author>> GetAuthorsByFullName(string fullName)
         {
-            Expression<Func<Author, bool>> expression = e => e.FullName == fullName;
-            return repository.GetByFilterAsync(expression);
+            return repository.GetByFilterAsync(e => e.FullName.ToLower() == fullName.ToLower());
         }
 
         public Task CreateAuthors(IEnumerable<Author> authors)

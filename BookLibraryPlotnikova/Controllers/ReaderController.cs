@@ -46,6 +46,8 @@ namespace LibraryPlotnikova.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateFromModel([FromForm] Reader reader)
         {
+            Normalize(reader);
+
             if (!VerifyReader(reader))
             {
                 return BadRequest();
@@ -100,6 +102,7 @@ namespace LibraryPlotnikova.Controllers
                 return NotFound();
             }
 
+            Normalize(readerFromModel);
             if (!VerifyReader(readerFromModel))
             {
                 return BadRequest();
@@ -301,6 +304,30 @@ namespace LibraryPlotnikova.Controllers
             IEnumerable<int> readersId = (await readerService.GetReadersByPassport(passport)).Select(r => r.Id);
             
             return !readersId.Any() || readersId.Contains(id);
+        }
+
+        private void Normalize(Reader reader)
+        {
+            if (reader == null)
+                return;
+
+            if (reader.Name != null)
+            {
+                string[] strs = reader.Name.Split(' ').Where(e => e.Length != 0).ToArray();
+                reader.Name = string.Join(' ', strs);
+            }
+
+            if (reader.Email != null)
+            {
+                string[] strs = reader.Email.Split(' ').Where(e => e.Length != 0).ToArray();
+                reader.Email = string.Join(' ', strs);
+            }
+
+            if (reader.Passport != null)
+            {
+                string[] strs = reader.Passport.Split(' ').Where(e => e.Length != 0).ToArray();
+                reader.Passport = string.Join(' ', strs);
+            }
         }
     }
 }

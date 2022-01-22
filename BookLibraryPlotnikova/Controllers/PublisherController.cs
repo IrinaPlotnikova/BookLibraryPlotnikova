@@ -56,6 +56,7 @@ namespace LibraryPlotnikova.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateFromModel([FromForm] Publisher publisher)
         {
+            Normalize(publisher);
             if (!await VerifyPublisher(publisher))
             {
                 return BadRequest();
@@ -112,6 +113,7 @@ namespace LibraryPlotnikova.Controllers
                 return NotFound();
             }
 
+            Normalize(publisher);
             if (!await VerifyPublisher(publisherFromModel))
             {
                 return BadRequest();
@@ -193,6 +195,18 @@ namespace LibraryPlotnikova.Controllers
             IEnumerable<int> publishersId = (await publisherService.GetPublishersByName(name)).Select(r => r.Id);
 
             return  !publishersId.Any() || publishersId.Contains(id);
+        }
+
+        private void Normalize(Publisher publisher)
+        {
+            if (publisher == null)
+                return;
+
+            if (publisher.Name != null)
+            {
+                string[] strs = publisher.Name.Split(' ').Where(e => e.Length != 0).ToArray();
+                publisher.Name = string.Join(' ', strs);
+            }
         }
     }
 }
